@@ -225,5 +225,12 @@ namespace Tanirent
             }
         }
 
+        private void btnTampilData_Click(object sender, EventArgs e)
+        {
+            TampilkanData();
+            BersihkanForm();
+        }
+
+       
     }
 }
