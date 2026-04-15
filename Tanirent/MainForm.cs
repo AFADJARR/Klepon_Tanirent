@@ -213,6 +213,17 @@ namespace Tanirent
             finally { conn.Close(); }
         }
 
-      
+        private void dgvAlat_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = dgvAlat.Rows[e.RowIndex];
+                txtNamaAlat.Text = row.Cells["nama_alat"].Value.ToString();
+                txtHarga.Text = row.Cells["harga_sewa"].Value.ToString();
+                cbKondisi.Text = row.Cells["status_kondisi"].Value.ToString();
+                cbStatus.Text = row.Cells["status_ketersediaan"].Value.ToString();
+            }
+        }
+
     }
 }
