@@ -19,5 +19,41 @@ namespace Tanirent
         {
             InitializeComponent();
         }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            TampilkanData();
+
+            // Isi pilihan ComboBox Input Data
+            if (cbKategori.Items.Count == 0)
+            {
+                cbKategori.Items.Add("Traktor");
+                cbKategori.Items.Add("Drone");
+                cbKategori.Items.Add("Mesin Panen");
+            }
+
+            if (cbKondisi.Items.Count == 0)
+            {
+                cbKondisi.Items.Add("Baik");
+                cbKondisi.Items.Add("Rusak");
+                cbKondisi.Items.Add("Perawatan");
+            }
+
+            if (cbStatus.Items.Count == 0)
+            {
+                cbStatus.Items.Add("Tersedia");
+                cbStatus.Items.Add("Disewa");
+            }
+
+            // --- ISI COMBOBOX FILTER (comboBox1) ---
+            if (comboBox1.Items.Count == 0)
+            {
+                comboBox1.Items.Add("Semua Data");
+                comboBox1.Items.Add("Baik");
+                comboBox1.Items.Add("Rusak");
+                comboBox1.Items.Add("Perawatan");
+                comboBox1.SelectedIndex = 0;
+            }
+        }
     }
 }
