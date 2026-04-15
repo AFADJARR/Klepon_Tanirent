@@ -241,6 +241,21 @@ namespace Tanirent
             }
         }
 
-       
+        private void btnPenyewa_Click(object sender, EventArgs e)
+        {
+            Form_Penyewa fPenyewa = new Form_Penyewa();
+            fPenyewa.ShowDialog();
+        }
+
+        private void btnTransaksi_Click(object sender, EventArgs e)
+        {
+            Form_Transaksi fTransaksi = new Form_Transaksi();
+            fTransaksi.ShowDialog();
+        }
+
+        private void btnLaporan_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Fitur Laporan dalam pengembangan!");
+        }
     }
 }
