@@ -165,5 +165,26 @@ namespace Tanirent
             }
         }
 
+        private void btnHapus_Click(object sender, EventArgs e)
+        {
+            if (dgvAlat.CurrentRow == null) return;
+            if (MessageBox.Show("Yakin ingin menghapus data ini?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                SqlConnection conn = konn.GetConn();
+                try
+                {
+                    conn.Open();
+                    string id = dgvAlat.CurrentRow.Cells["id_alat"].Value.ToString();
+                    SqlCommand cmd = new SqlCommand("DELETE FROM Alat_Mesin WHERE id_alat=@id", conn);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.ExecuteNonQuery();
+                    TampilkanData();
+                    BersihkanForm();
+                }
+                catch (Exception ex) { MessageBox.Show(ex.Message); }
+                finally { conn.Close(); }
+            }
+        }
+
     }
 }
