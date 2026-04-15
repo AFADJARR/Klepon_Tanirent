@@ -125,7 +125,7 @@ namespace Tanirent
                 cmd.Parameters.AddWithValue("@kondisi", cbKondisi.Text);
                 cmd.Parameters.AddWithValue("@status", cbStatus.Text);
 
-                cmd.ExecuteNonQuery(); // Gunakan NonQuery untuk Simpan
+                cmd.ExecuteNonQuery();
                 MessageBox.Show("Berhasil Tambah Data!");
                 TampilkanData();
                 BersihkanForm();
@@ -134,6 +134,36 @@ namespace Tanirent
             finally { conn.Close(); }
         }
 
-       
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (dgvAlat.CurrentRow == null) return;
+
+            if (MessageBox.Show("Yakin ingin mengubah data ini?", "Konfirmasi", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                SqlConnection conn = konn.GetConn();
+                try
+                {
+                    conn.Open();
+                    string idAlat = dgvAlat.CurrentRow.Cells["id_alat"].Value.ToString();
+                    string sql = @"UPDATE Alat_Mesin SET nama_alat=@nama, harga_sewa=@harga, status_kondisi=@kondisi, status_ketersediaan=@status 
+                                   WHERE id_alat=@id";
+
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.AddWithValue("@id", idAlat);
+                    cmd.Parameters.AddWithValue("@nama", txtNamaAlat.Text);
+                    cmd.Parameters.AddWithValue("@harga", decimal.Parse(txtHarga.Text));
+                    cmd.Parameters.AddWithValue("@kondisi", cbKondisi.Text);
+                    cmd.Parameters.AddWithValue("@status", cbStatus.Text);
+
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Data Berhasil Diupdate!");
+                    TampilkanData();
+                    BersihkanForm();
+                }
+                catch (Exception ex) { MessageBox.Show("Error Update: " + ex.Message); }
+                finally { conn.Close(); }
+            }
+        }
+
     }
 }
