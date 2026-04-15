@@ -85,5 +85,16 @@ namespace Tanirent
             finally { conn.Close(); }
         }
 
+        void BersihkanForm()
+        {
+            txtNamaAlat.Clear();
+            txtHarga.Clear();
+            cbKategori.SelectedIndex = -1;
+            cbKondisi.SelectedIndex = -1;
+            cbStatus.SelectedIndex = -1;
+            comboBox1.SelectedIndex = 0;
+            txtNamaAlat.Focus();
+        }
+
     }
 }
