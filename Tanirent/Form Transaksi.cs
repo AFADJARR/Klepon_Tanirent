@@ -50,6 +50,31 @@ namespace Tanirent
             finally { conn.Close(); }
         }
 
+        private void cbAlat_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbAlat.SelectedIndex != -1 && cbAlat.SelectedValue != null)
+            {
+                if (cbAlat.SelectedValue is DataRowView) return;
+
+                SqlConnection conn = konn.GetConn();
+                try
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT harga_sewa FROM Alat_Mesin WHERE id_alat = @id", conn);
+                    cmd.Parameters.AddWithValue("@id", cbAlat.SelectedValue);
+
+                    object harga = cmd.ExecuteScalar();
+                    if (harga != null)
+                    {
+                        txtHarga.Text = harga.ToString();
+                        HitungTotal();
+                    }
+                }
+                catch (Exception ex) { MessageBox.Show("Error Harga: " + ex.Message); }
+                finally { conn.Close(); }
+            }
+        }
+
        
     }
 }
