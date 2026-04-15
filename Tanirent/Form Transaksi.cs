@@ -96,6 +96,65 @@ namespace Tanirent
         private void dtpKembali_ValueChanged(object sender, EventArgs e) { HitungTotal(); }
         private void dtpPinjam_ValueChanged(object sender, EventArgs e) { HitungTotal(); }
 
+        private void btnPinjam_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtNama.Text) || cbAlat.SelectedIndex == -1)
+            {
+                MessageBox.Show("Lengkapi Nama Penyewa dan Pilih Alat!", "Validasi");
+                return;
+            }
+
+            SqlConnection conn = konn.GetConn();
+            SqlTransaction trans = null;
+
+            try
+            {
+                conn.Open();
+
+                SqlCommand cmdCariUser = new SqlCommand("SELECT id_penyewa FROM Penyewa WHERE nama_petani = @nama", conn);
+                cmdCariUser.Parameters.AddWithValue("@nama", txtNama.Text);
+                object result = cmdCariUser.ExecuteScalar();
+
+                if (result == null)
+                {
+                    MessageBox.Show("Penyewa '" + txtNama.Text + "' tidak ketemu!", "Error");
+                    return;
+                }
+
+                int idPenyewa = (int)result;
+                trans = conn.BeginTransaction();
+
+                string sqlTrans = @"INSERT INTO Transaksi (id_alat, id_penyewa, id_admin, tgl_sewa, tgl_kembali, total_bayar) 
+                                   VALUES (@id_alat, @id_penyewa, 1, @tgl_sewa, @tgl_kembali, @total)";
+
+                SqlCommand cmdTrans = new SqlCommand(sqlTrans, conn, trans);
+                cmdTrans.Parameters.AddWithValue("@id_alat", cbAlat.SelectedValue);
+                cmdTrans.Parameters.AddWithValue("@id_penyewa", idPenyewa);
+                cmdTrans.Parameters.AddWithValue("@tgl_sewa", dtpPinjam.Value);
+                cmdTrans.Parameters.AddWithValue("@tgl_kembali", dtpKembali.Value);
+                cmdTrans.Parameters.AddWithValue("@total", decimal.Parse(txtTotal.Text));
+                cmdTrans.ExecuteNonQuery();
+
+                string sqlUpdate = "UPDATE Alat_Mesin SET status_ketersediaan = 'Disewa' WHERE id_alat = @id";
+                SqlCommand cmdUpdate = new SqlCommand(sqlUpdate, conn, trans);
+                cmdUpdate.Parameters.AddWithValue("@id", cbAlat.SelectedValue);
+                cmdUpdate.ExecuteNonQuery();
+
+                trans.Commit();
+                MessageBox.Show("Sukses! Alat sudah dipinjam.");
+
+                TampilkanTransaksi();
+                IsiComboAlat();
+                BersihkanForm();
+            }
+            catch (Exception ex)
+            {
+                if (trans != null) trans.Rollback();
+                MessageBox.Show("Gagal Simpan: " + ex.Message);
+            }
+            finally { conn.Close(); }
+        }
+
        
     }
 }
