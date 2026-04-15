@@ -186,5 +186,33 @@ namespace Tanirent
             }
         }
 
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox1.Text == "Semua Data")
+            {
+                TampilkanData();
+                return;
+            }
+
+            SqlConnection conn = konn.GetConn();
+            try
+            {
+                conn.Open();
+                string sql = "SELECT * FROM Alat_Mesin WHERE status_kondisi = @kondisi";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@kondisi", comboBox1.Text);
+
+                SqlDataReader dr = cmd.ExecuteReader();
+                DataTable dt = new DataTable();
+                dt.Load(dr); 
+                dgvAlat.DataSource = dt;
+
+                dr.Close();
+            }
+            catch (Exception ex) { MessageBox.Show("Gagal Filter: " + ex.Message); }
+            finally { conn.Close(); }
+        }
+
+      
     }
 }
