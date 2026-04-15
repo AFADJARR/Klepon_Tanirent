@@ -24,7 +24,6 @@ namespace Tanirent
         {
             TampilkanData();
 
-            // Isi pilihan ComboBox Input Data
             if (cbKategori.Items.Count == 0)
             {
                 cbKategori.Items.Add("Traktor");
@@ -45,7 +44,6 @@ namespace Tanirent
                 cbStatus.Items.Add("Disewa");
             }
 
-            // --- ISI COMBOBOX FILTER (comboBox1) ---
             if (comboBox1.Items.Count == 0)
             {
                 comboBox1.Items.Add("Semua Data");
@@ -55,5 +53,6 @@ namespace Tanirent
                 comboBox1.SelectedIndex = 0;
             }
         }
+
     }
 }
