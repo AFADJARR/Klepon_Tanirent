@@ -155,6 +155,16 @@ namespace Tanirent
             finally { conn.Close(); }
         }
 
-       
+        void BersihkanForm()
+        {
+            txtNama.Clear();
+            txtHarga.Clear();
+            txtTotal.Clear();
+            cbAlat.SelectedIndex = -1;
+            dtpPinjam.Value = DateTime.Now;
+            dtpKembali.Value = DateTime.Now.AddDays(1);
+        }
+
+      
     }
 }
