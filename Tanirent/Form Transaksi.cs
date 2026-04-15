@@ -75,6 +75,27 @@ namespace Tanirent
             }
         }
 
+        void HitungTotal()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(txtHarga.Text))
+                {
+                    TimeSpan ts = dtpKembali.Value.Date - dtpPinjam.Value.Date;
+                    int hari = ts.Days;
+                    if (hari <= 0) hari = 1;
+
+                    decimal harga = decimal.Parse(txtHarga.Text);
+                    decimal total = hari * harga;
+                    txtTotal.Text = total.ToString();
+                }
+            }
+            catch { }
+        }
+
+        private void dtpKembali_ValueChanged(object sender, EventArgs e) { HitungTotal(); }
+        private void dtpPinjam_ValueChanged(object sender, EventArgs e) { HitungTotal(); }
+
        
     }
 }
