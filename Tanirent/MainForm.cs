@@ -54,5 +54,36 @@ namespace Tanirent
             }
         }
 
+        void TampilkanData()
+        {
+            SqlConnection conn = konn.GetConn();
+            try
+            {
+                conn.Open();
+                string query = @"SELECT id_alat, id_kat, nama_alat, merk, tipe, 
+                                harga_sewa, status_kondisi, status_ketersediaan 
+                                FROM Alat_Mesin";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                SqlDataReader dr = cmd.ExecuteReader(); 
+
+                DataTable dt = new DataTable();
+                dt.Load(dr); 
+                dgvAlat.DataSource = dt;
+
+                dgvAlat.Columns["id_alat"].HeaderText = "ID";
+                dgvAlat.Columns["id_kat"].Visible = false;
+                dgvAlat.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+                dr.Close(); 
+
+                SqlCommand cmdHitung = new SqlCommand("SELECT COUNT(*) FROM Alat_Mesin", conn);
+                int jumlahData = (int)cmdHitung.ExecuteScalar();
+                lblTotal.Text = "Total Data: " + jumlahData.ToString();
+            }
+            catch (Exception ex) { MessageBox.Show("Error Tampil: " + ex.Message); }
+            finally { conn.Close(); }
+        }
+
     }
 }
