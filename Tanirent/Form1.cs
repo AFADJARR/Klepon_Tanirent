@@ -67,5 +67,38 @@ namespace Tanirent
             }
         }
 
+        private void btnConnect_Click(object sender, EventArgs e)
+        {
+            Koneksi konn = new Koneksi();
+            SqlConnection conn = konn.GetConn();
+
+            try
+            {
+
+                conn.Open();
+                MessageBox.Show("Mantap Bang! Koneksi ke Database DBsewatani BERHASIL.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Waduh Gagal Connect Bang!\n\nError: " + ex.Message, "Koneksi Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
+        }
+    }
+
+    class Koneksi
+    {
+        public SqlConnection GetConn()
+        {
+            SqlConnection conn = new SqlConnection();
+            conn.ConnectionString = @"Data Source=JONNISHEREEE\FADJAR;Initial Catalog=DBsewatani;Integrated Security=True";
+            return conn;
+        }
     }
 }
