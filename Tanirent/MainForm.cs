@@ -96,5 +96,44 @@ namespace Tanirent
             txtNamaAlat.Focus();
         }
 
+        private void btnSimpan_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtNamaAlat.Text) || string.IsNullOrEmpty(txtHarga.Text) || string.IsNullOrEmpty(cbKategori.Text))
+            {
+                MessageBox.Show("Field Penting Tidak Boleh Kosong!", "Peringatan");
+                return;
+            }
+
+            SqlConnection conn = konn.GetConn();
+            try
+            {
+                conn.Open();
+                string merkOto = ""; string tipeOto = "";
+                if (cbKategori.Text == "Traktor") { merkOto = "Yanmar"; tipeOto = "Hand Traktor G1000"; }
+                else if (cbKategori.Text == "Drone") { merkOto = "DJI"; tipeOto = "Agras T20"; }
+                else { merkOto = "Umum"; tipeOto = "Standar"; }
+
+                string sql = @"INSERT INTO Alat_Mesin (id_kat, nama_alat, merk, tipe, harga_sewa, status_kondisi, status_ketersediaan) 
+                               VALUES (@idkat, @nama, @merk, @tipe, @harga, @kondisi, @status)";
+
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@idkat", cbKategori.Text == "Traktor" ? 1 : 2);
+                cmd.Parameters.AddWithValue("@nama", txtNamaAlat.Text);
+                cmd.Parameters.AddWithValue("@merk", merkOto);
+                cmd.Parameters.AddWithValue("@tipe", tipeOto);
+                cmd.Parameters.AddWithValue("@harga", decimal.Parse(txtHarga.Text));
+                cmd.Parameters.AddWithValue("@kondisi", cbKondisi.Text);
+                cmd.Parameters.AddWithValue("@status", cbStatus.Text);
+
+                cmd.ExecuteNonQuery(); // Gunakan NonQuery untuk Simpan
+                MessageBox.Show("Berhasil Tambah Data!");
+                TampilkanData();
+                BersihkanForm();
+            }
+            catch (Exception ex) { MessageBox.Show("Gagal Simpan: " + ex.Message); }
+            finally { conn.Close(); }
+        }
+
+       
     }
 }
