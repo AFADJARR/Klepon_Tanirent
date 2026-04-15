@@ -231,6 +231,16 @@ namespace Tanirent
             BersihkanForm();
         }
 
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Yakin ingin Logout?", "Konfirmasi", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                this.Hide();
+                Form1 login = new Form1();
+                login.Show();
+            }
+        }
+
        
     }
 }
