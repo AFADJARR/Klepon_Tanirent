@@ -165,6 +165,40 @@ namespace Tanirent
             dtpKembali.Value = DateTime.Now.AddDays(1);
         }
 
-      
+        void TampilkanTransaksi()
+        {
+            SqlConnection conn = konn.GetConn();
+            try
+            {
+                conn.Open();
+                string query = @"SELECT T.id_transaksi as ID, P.nama_petani as Penyewa, 
+                                ISNULL(A.nama_alat, 'Alat') as Alat, 
+                                T.tgl_sewa as [Pinjam], T.tgl_kembali as [Kembali], 
+                                T.total_bayar as [Total] 
+                                FROM Transaksi T
+                                JOIN Penyewa P ON T.id_penyewa = P.id_penyewa
+                                JOIN Alat_Mesin A ON T.id_alat = A.id_alat";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                DataTable dt = new DataTable();
+                dt.Load(dr); 
+                dgvTransaksi.DataSource = dt;
+
+                dr.Close();
+            }
+            catch (Exception ex) { MessageBox.Show("Gagal Refresh Grid: " + ex.Message); }
+            finally { conn.Close(); }
+        }
+
+        private void Form_Transaksi_Load_1(object sender, EventArgs e)
+        {
+            IsiComboAlat();
+            TampilkanTransaksi();
+
+            dtpPinjam.Value = DateTime.Now;
+            dtpKembali.Value = DateTime.Now.AddDays(1);
+        }
     }
 }
