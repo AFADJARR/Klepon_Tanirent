@@ -87,6 +87,58 @@ namespace Tanirent
             finally { conn.Close(); }
         }
 
-       
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (dgvPenyewa.CurrentRow == null) return;
+
+            if (MessageBox.Show("Yakin mau ubah data ini?", "Konfirmasi", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                SqlConnection conn = konn.GetConn();
+                try
+                {
+                    conn.Open();
+                    string id = dgvPenyewa.CurrentRow.Cells["id_penyewa"].Value.ToString();
+                    string sql = "UPDATE Penyewa SET nama_petani=@nama, no_hp=@nohp, alamat=@alamat WHERE id_penyewa=@id";
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@nama", txtNamaPetani.Text);
+                    cmd.Parameters.AddWithValue("@nohp", txtNoHp.Text);
+                    cmd.Parameters.AddWithValue("@alamat", txtAlamat.Text);
+
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Data Berhasil Diperbarui!");
+                    TampilkanPenyewa();
+                    Bersihkan();
+                }
+                catch (Exception ex) { MessageBox.Show("Gagal Edit: " + ex.Message); }
+                finally { conn.Close(); }
+            }
+        }
+
+        private void btnHapus_Click(object sender, EventArgs e)
+        {
+            if (dgvPenyewa.CurrentRow == null) return;
+
+            if (MessageBox.Show("Hapus data penyewa ini?", "Peringatan", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                SqlConnection conn = konn.GetConn();
+                try
+                {
+                    conn.Open();
+                    string id = dgvPenyewa.CurrentRow.Cells["id_penyewa"].Value.ToString();
+                    SqlCommand cmd = new SqlCommand("DELETE FROM Penyewa WHERE id_penyewa=@id", conn);
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Data Terhapus!");
+                    TampilkanPenyewa();
+                    Bersihkan();
+                }
+                catch (Exception ex) { MessageBox.Show("Gagal Hapus: " + ex.Message); }
+                finally { conn.Close(); }
+            }
+        }
+
+     
     }
 }
