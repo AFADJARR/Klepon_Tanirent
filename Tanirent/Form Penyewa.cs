@@ -139,6 +139,20 @@ namespace Tanirent
             }
         }
 
-     
+        private void btnBersihkan_Click(object sender, EventArgs e)
+        {
+            Bersihkan();
+        }
+
+        private void dgvPenyewa_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = dgvPenyewa.Rows[e.RowIndex];
+                txtNamaPetani.Text = row.Cells["nama_petani"].Value.ToString();
+                txtNoHp.Text = row.Cells["no_hp"].Value.ToString();
+                txtAlamat.Text = row.Cells["alamat"].Value.ToString();
+            }
+        }
     }
 }
