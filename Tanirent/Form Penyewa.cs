@@ -52,6 +52,41 @@ namespace Tanirent
             finally { conn.Close(); }
         }
 
+        void Bersihkan()
+        {
+            txtNamaPetani.Clear();
+            txtNoHp.Clear();
+            txtAlamat.Clear();
+            txtNamaPetani.Focus();
+        }
+
+        private void btnSimpan_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtNamaPetani.Text) || string.IsNullOrWhiteSpace(txtNoHp.Text))
+            {
+                MessageBox.Show("Nama dan No HP wajib diisi, Bang!", "Peringatan");
+                return;
+            }
+
+            SqlConnection conn = konn.GetConn();
+            try
+            {
+                conn.Open();
+                string sql = "INSERT INTO Penyewa (nama_petani, no_hp, alamat) VALUES (@nama, @nohp, @alamat)";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@nama", txtNamaPetani.Text);
+                cmd.Parameters.AddWithValue("@nohp", txtNoHp.Text);
+                cmd.Parameters.AddWithValue("@alamat", txtAlamat.Text);
+
+                cmd.ExecuteNonQuery(); 
+                MessageBox.Show("Data Penyewa Berhasil Disimpan!");
+                TampilkanPenyewa();
+                Bersihkan();
+            }
+            catch (Exception ex) { MessageBox.Show("Gagal Simpan: " + ex.Message); }
+            finally { conn.Close(); }
+        }
+
        
     }
 }
