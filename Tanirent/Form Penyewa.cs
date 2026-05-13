@@ -31,128 +31,47 @@ namespace Tanirent
             try
             {
                 conn.Open();
-                string query = "SELECT id_penyewa, nama_petani, no_hp, alamat FROM Penyewa";
+                string query = "SELECT * FROM vw_DaftarPenyewa";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
-                SqlDataReader dr = cmd.ExecuteReader(); 
+                SqlDataReader dr = cmd.ExecuteReader();
 
                 DataTable dt = new DataTable();
-                dt.Load(dr); 
+                dt.Load(dr);
+
+                
+                dgvPenyewa.DataSource = null;
                 dgvPenyewa.DataSource = dt;
 
-                dgvPenyewa.Columns["id_penyewa"].HeaderText = "ID";
-                dgvPenyewa.Columns["nama_petani"].HeaderText = "Nama Petani";
-                dgvPenyewa.Columns["no_hp"].HeaderText = "No. HP";
-                dgvPenyewa.Columns["alamat"].HeaderText = "Alamat";
-                dgvPenyewa.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-                dr.Close(); 
-            }
-            catch (Exception ex) { MessageBox.Show("Gagal Tampil: " + ex.Message); }
-            finally { conn.Close(); }
-        }
-
-        void Bersihkan()
-        {
-            txtNamaPetani.Clear();
-            txtNoHp.Clear();
-            txtAlamat.Clear();
-            txtNamaPetani.Focus();
-        }
-
-        private void btnSimpan_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(txtNamaPetani.Text) || string.IsNullOrWhiteSpace(txtNoHp.Text))
-            {
-                MessageBox.Show("Nama dan No HP wajib diisi, Bang!", "Peringatan");
-                return;
-            }
-
-            SqlConnection conn = konn.GetConn();
-            try
-            {
-                conn.Open();
-                string sql = "INSERT INTO Penyewa (nama_petani, no_hp, alamat) VALUES (@nama, @nohp, @alamat)";
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@nama", txtNamaPetani.Text);
-                cmd.Parameters.AddWithValue("@nohp", txtNoHp.Text);
-                cmd.Parameters.AddWithValue("@alamat", txtAlamat.Text);
-
-                cmd.ExecuteNonQuery(); 
-                MessageBox.Show("Data Penyewa Berhasil Disimpan!");
-                TampilkanPenyewa();
-                Bersihkan();
-            }
-            catch (Exception ex) { MessageBox.Show("Gagal Simpan: " + ex.Message); }
-            finally { conn.Close(); }
-        }
-
-        private void btnEdit_Click(object sender, EventArgs e)
-        {
-            if (dgvPenyewa.CurrentRow == null) return;
-
-            if (MessageBox.Show("Yakin mau ubah data ini?", "Konfirmasi", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                SqlConnection conn = konn.GetConn();
-                try
+                
+                if (dgvPenyewa.Columns.Count > 0)
                 {
-                    conn.Open();
-                    string id = dgvPenyewa.CurrentRow.Cells["id_penyewa"].Value.ToString();
-                    string sql = "UPDATE Penyewa SET nama_petani=@nama, no_hp=@nohp, alamat=@alamat WHERE id_penyewa=@id";
-                    SqlCommand cmd = new SqlCommand(sql, conn);
-                    cmd.Parameters.AddWithValue("@id", id);
-                    cmd.Parameters.AddWithValue("@nama", txtNamaPetani.Text);
-                    cmd.Parameters.AddWithValue("@nohp", txtNoHp.Text);
-                    cmd.Parameters.AddWithValue("@alamat", txtAlamat.Text);
+                    if (dgvPenyewa.Columns.Contains("id_penyewa"))
+                        dgvPenyewa.Columns["id_penyewa"].HeaderText = "ID";
 
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Data Berhasil Diperbarui!");
-                    TampilkanPenyewa();
-                    Bersihkan();
+                    if (dgvPenyewa.Columns.Contains("nama_petani"))
+                        dgvPenyewa.Columns["nama_petani"].HeaderText = "Nama Petani";
+
+                    if (dgvPenyewa.Columns.Contains("no_hp"))
+                        dgvPenyewa.Columns["no_hp"].HeaderText = "No. HP";
+
+                    if (dgvPenyewa.Columns.Contains("alamat"))
+                        dgvPenyewa.Columns["alamat"].HeaderText = "Alamat";
+
+                    dgvPenyewa.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 }
-                catch (Exception ex) { MessageBox.Show("Gagal Edit: " + ex.Message); }
-                finally { conn.Close(); }
+
+                dr.Close();
             }
-        }
-
-        private void btnHapus_Click(object sender, EventArgs e)
-        {
-            if (dgvPenyewa.CurrentRow == null) return;
-
-            if (MessageBox.Show("Hapus data penyewa ini?", "Peringatan", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            catch (Exception ex)
             {
-                SqlConnection conn = konn.GetConn();
-                try
-                {
-                    conn.Open();
-                    string id = dgvPenyewa.CurrentRow.Cells["id_penyewa"].Value.ToString();
-                    SqlCommand cmd = new SqlCommand("DELETE FROM Penyewa WHERE id_penyewa=@id", conn);
-                    cmd.Parameters.AddWithValue("@id", id);
-
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Data Terhapus!");
-                    TampilkanPenyewa();
-                    Bersihkan();
-                }
-                catch (Exception ex) { MessageBox.Show("Gagal Hapus: " + ex.Message); }
-                finally { conn.Close(); }
+                MessageBox.Show("Gagal Tampil: " + ex.Message);
             }
-        }
-
-        private void btnBersihkan_Click(object sender, EventArgs e)
-        {
-            Bersihkan();
-        }
-
-        private void dgvPenyewa_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
+            finally
             {
-                DataGridViewRow row = dgvPenyewa.Rows[e.RowIndex];
-                txtNamaPetani.Text = row.Cells["nama_petani"].Value.ToString();
-                txtNoHp.Text = row.Cells["no_hp"].Value.ToString();
-                txtAlamat.Text = row.Cells["alamat"].Value.ToString();
+                conn.Close();
             }
         }
+
     }
 }
