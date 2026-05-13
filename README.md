@@ -4,5 +4,5 @@
 <img width="1223" height="633" alt="Screenshot 2026-04-16 075330" src="https://github.com/user-attachments/assets/b718275a-275b-4ab0-8e3c-3603df89ed76" />
 <img width="1919" height="1192" alt="Screenshot 2026-04-16 075301" src="https://github.com/user-attachments/assets/b41ee751-f4e9-409e-93ad-f91febb2241d" />
 <img width="1919" height="1199" alt="Screenshot 2026-04-16 075147" src="https://github.com/user-attachments/assets/33e0a619-c40d-43f1-96c0-18ad5975dbd1" />
-
-
+<img width="807" height="527" alt="Screenshot 2026-05-14 014149" src="https://github.com/user-attachments/assets/710af21b-3013-4fc5-80c0-2ae95de71a38" />
+menginput ' OR 1=1-- ke kolom nama petaani
