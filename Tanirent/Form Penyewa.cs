@@ -73,5 +73,38 @@ namespace Tanirent
             }
         }
 
+
+        private void btnSimpan_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtNamaPetani.Text) || string.IsNullOrWhiteSpace(txtNoHp.Text))
+            {
+                MessageBox.Show("Nama dan No HP wajib diisi, Bang!", "Peringatan");
+                return;
+            }
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(konn.GetConn().ConnectionString))
+                {
+                    
+                    using (SqlCommand cmd = new SqlCommand("dbo.sp_InsertPenyewa", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        
+                        cmd.Parameters.Add("@NamaPetani", SqlDbType.VarChar).Value = txtNamaPetani.Text;
+                        cmd.Parameters.Add("@NoHp", SqlDbType.VarChar).Value = txtNoHp.Text;
+                        cmd.Parameters.Add("@Alamat", SqlDbType.Text).Value = txtAlamat.Text;
+
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Data Penyewa Berhasil Disimpan via SP!");
+                        TampilkanPenyewa();
+                    }
+                }
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
+
     }
 }
