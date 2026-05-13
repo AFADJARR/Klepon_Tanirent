@@ -152,5 +152,33 @@ namespace Tanirent
             catch (Exception ex) { MessageBox.Show("Error Update: " + ex.Message); }
         }
 
+        private void btnHapus_Click(object sender, EventArgs e)
+        {
+            if (dgvAlat.CurrentRow == null) return;
+            string connectionString = konn.GetConn().ConnectionString;
+
+            if (MessageBox.Show("Yakin ingin menghapus?", "Konfirmasi", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                try
+                {
+                    using (SqlConnection conn = new SqlConnection(connectionString))
+                    {
+                        using (SqlCommand cmd = new SqlCommand("sp_DeleteAlat", conn))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@id_alat", dgvAlat.CurrentRow.Cells["id_alat"].Value);
+
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+
+                            MessageBox.Show("Data berhasil dihapus");
+                            TampilkanData();
+                        }
+                    }
+                }
+                catch (Exception ex) { MessageBox.Show("Gagal Hapus: " + ex.Message); }
+            }
+        }
+
     }
 }
