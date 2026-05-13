@@ -207,5 +207,51 @@ namespace Tanirent
             finally { conn.Close(); }
         }
 
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+        
+            string connectionString = konn.GetConn().ConnectionString;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    
+                    using (SqlCommand cmd = new SqlCommand("sp_SearchAlat", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure; 
+
+                        cmd.Parameters.AddWithValue("@keyword", cbSearch.Text);
+
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) 
+                        {
+                            DataTable dt = new DataTable();
+                            da.Fill(dt); 
+
+                           
+                            bs.DataSource = dt;
+                            dgvAlat.DataSource = bs;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+               
+            }
+        }
+
+        private void dgvAlat_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = dgvAlat.Rows[e.RowIndex];
+                txtNamaAlat.Text = row.Cells["nama_alat"].Value.ToString();
+                txtHarga.Text = row.Cells["harga_sewa"].Value.ToString();
+                cbKondisi.Text = row.Cells["status_kondisi"].Value.ToString();
+                cbStatus.Text = row.Cells["status_ketersediaan"].Value.ToString();
+            }
+        }
     }
 }
