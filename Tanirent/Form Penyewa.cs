@@ -214,5 +214,66 @@ namespace Tanirent
 
         }
 
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SqlConnection conn = konn.GetConn())
+                {
+                    conn.Open();
+                    string query = "UPDATE Penyewa SET nama_petani='HACKED' WHERE id_penyewa='"
+                        + txtNamaPetani.Text + "'";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        int result = cmd.ExecuteNonQuery();
+                        MessageBox.Show(result + " baris terupdate");
+                    }
+                }
+                TampilkanPenyewa();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnreset_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SqlConnection conn = konn.GetConn())
+                {
+                    conn.Open();
+                    string query = @"IF OBJECT_ID('dbo.Penyewa_Backup') IS NOT NULL AND OBJECT_ID('dbo.Transaksi_Backup') IS NOT NULL
+                BEGIN
+                    
+                    DELETE FROM dbo.Transaksi
+                    DELETE FROM dbo.Penyewa;
+
+                    SET IDENTITY_INSERT dbo.Penyewa ON;
+                    INSERT INTO dbo.Penyewa (id_penyewa, nama_petani, no_hp, alamat) 
+                    SELECT id_penyewa, nama_petani, no_hp, alamat FROM dbo.Penyewa_Backup;
+                    SET IDENTITY_INSERT dbo.Penyewa OFF;
+
+                    SET IDENTITY_INSERT dbo.Transaksi ON;
+                    INSERT INTO dbo.Transaksi (id_transaksi, id_alat, id_penyewa, tgl_sewa, tgl_kembali, total_bayar) 
+                    SELECT id_transaksi, id_alat, id_penyewa, tgl_sewa, tgl_kembali, total_bayar FROM dbo.Transaksi_Backup;
+                    SET IDENTITY_INSERT dbo.Transaksi OFF;
+                END";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                MessageBox.Show("Data Berhasil Direset! Semua transaksi dan penyewa telah kembali ke kondisi backup.");
+                TampilkanPenyewa(); 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Reset gagal: " + ex.Message);
+            }
+        }
     }
 }
