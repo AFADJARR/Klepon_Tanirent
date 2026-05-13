@@ -253,5 +253,48 @@ namespace Tanirent
                 cbStatus.Text = row.Cells["status_ketersediaan"].Value.ToString();
             }
         }
+
+        private void btnTampilData_Click(object sender, EventArgs e)
+        {
+            TampilkanData();
+            BersihkanForm();
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Yakin ingin Logout?", "Konfirmasi", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                this.Hide();
+                Form1 login = new Form1();
+                login.Show();
+            }
+        }
+
+
+        private void btnPenyewa_Click(object sender, EventArgs e)
+        {
+            Form_Penyewa fPenyewa = new Form_Penyewa();
+            fPenyewa.ShowDialog();
+        }
+
+        private void btnTransaksi_Click(object sender, EventArgs e)
+        {
+            Form_Transaksi fTransaksi = new Form_Transaksi();
+            fTransaksi.ShowDialog();
+        }
+
+        void BindControls()
+        {
+            txtNamaAlat.DataBindings.Clear();
+            txtHarga.DataBindings.Clear();
+            cbKondisi.DataBindings.Clear();
+            cbStatus.DataBindings.Clear();
+
+            txtNamaAlat.DataBindings.Add("Text", bs, "nama_alat", true);
+            txtHarga.DataBindings.Add("Text", bs, "harga_sewa", true);
+
+            cbKondisi.DataBindings.Add("Text", bs, "status_kondisi", true);
+            cbStatus.DataBindings.Add("Text", bs, "status_ketersediaan", true);
+        }
     }
 }
