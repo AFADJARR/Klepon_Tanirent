@@ -77,5 +77,49 @@ namespace Tanirent
             }
         }
 
+        void BersihkanForm()
+        {
+            txtNamaAlat.Clear();
+            txtHarga.Clear();
+            cbKategori.SelectedIndex = -1;
+            cbKondisi.SelectedIndex = -1;
+            cbStatus.SelectedIndex = -1;
+            cbSearch.SelectedIndex = 0;
+            txtNamaAlat.Focus();
+        }
+
+        private void btnSimpan_Click(object sender, EventArgs e)
+        {
+            string connectionString = konn.GetConn().ConnectionString;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_InsertAlat", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@id_kat", cbKategori.Text == "Traktor" ? 1 : 2);
+                        cmd.Parameters.AddWithValue("@nama_alat", txtNamaAlat.Text);
+                        cmd.Parameters.AddWithValue("@merk", "Umum");
+                        cmd.Parameters.AddWithValue("@tipe", "Standar");
+                        cmd.Parameters.AddWithValue("@harga_sewa", decimal.Parse(txtHarga.Text));
+                        cmd.Parameters.AddWithValue("@status_kondisi", cbKondisi.Text);
+
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+
+                        MessageBox.Show("Berhasil Tambah Data!");
+                        TampilkanData();
+                        BersihkanForm();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal Simpan: " + ex.Message);
+            }
+        }
     }
 }
