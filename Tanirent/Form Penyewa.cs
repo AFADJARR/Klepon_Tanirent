@@ -106,5 +106,35 @@ namespace Tanirent
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (dgvPenyewa.CurrentRow != null)
+            {
+                try
+                {
+                    using (SqlConnection conn = new SqlConnection(konn.GetConn().ConnectionString))
+                    {
+                        using (SqlCommand cmd = new SqlCommand("dbo.sp_UpdatePenyewa", conn))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            int id = Convert.ToInt32(dgvPenyewa.CurrentRow.Cells[0].Value);
+
+                            cmd.Parameters.Add("@PenyewaID", SqlDbType.Int).Value = id;
+                            cmd.Parameters.Add("@NamaPetani", SqlDbType.VarChar).Value = txtNamaPetani.Text;
+                            cmd.Parameters.Add("@NoHp", SqlDbType.VarChar).Value = txtNoHp.Text;
+                            cmd.Parameters.Add("@Alamat", SqlDbType.Text).Value = txtAlamat.Text;
+
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            MessageBox.Show("Data berhasil diperbarui via bray");
+                            TampilkanPenyewa();
+                        }
+                    }
+                }
+                catch (Exception ex) { MessageBox.Show(ex.Message); }
+            }
+        }
+
     }
 }
