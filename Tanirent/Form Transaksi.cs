@@ -144,5 +144,73 @@ namespace Tanirent
             }
         }
 
+        void BersihkanForm()
+        {
+            cmbNama.SelectedIndex = -1;
+            txtHarga.Clear();
+            txtTotal.Clear();
+            cbAlat.SelectedIndex = -1;
+            dtpPinjam.Value = DateTime.Now;
+            dtpKembali.Value = DateTime.Now.AddDays(1);
+        }
+
+        void IsiComboPenyewa()
+        {
+            SqlConnection conn = konn.GetConn();
+            try
+            {
+                conn.Open();
+                string sql = "SELECT id_penyewa, nama_petani FROM Penyewa";
+                SqlDataAdapter da = new SqlDataAdapter(sql, conn);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                cmbNama.DataSource = dt;
+                cmbNama.DisplayMember = "nama_petani"; 
+                cmbNama.ValueMember = "id_penyewa";    
+                cmbNama.SelectedIndex = -1;
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            finally { conn.Close(); }
+        }
+
+        void TampilkanTransaksi()
+        {
+            string connectionString = konn.GetConn().ConnectionString;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    
+                    string query = "SELECT * FROM vw_DaftarTransaksi";
+
+                    SqlDataAdapter da = new SqlDataAdapter(query, conn);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    transaksiBindingSource.DataSource = dt;
+                    dgvTransaksi.DataSource = transaksiBindingSource;
+                    dgvTransaksi.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                }
+            }
+            catch (Exception ex) { MessageBox.Show("Gagal Refresh Grid: " + ex.Message); }
+        }
+
+        private void Form_Transaksi_Load_1(object sender, EventArgs e)
+        {
+            this.transaksiTableAdapter.Fill(this.dBsewataniDataSet1.Transaksi);
+
+            IsiComboAlat();
+            IsiComboPenyewa();
+            TampilkanTransaksi();
+
+            dtpPinjam.Value = DateTime.Now;
+            dtpKembali.Value = DateTime.Now.AddDays(1);
+        }
+
+        private void cmbNama_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
