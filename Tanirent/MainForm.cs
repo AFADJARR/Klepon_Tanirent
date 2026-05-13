@@ -51,5 +51,31 @@ namespace Tanirent
             bs.ResetBindings(false);
         }
 
+        void TampilkanData()
+        {
+            string connectionString = konn.GetConn().ConnectionString;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    string query = "SELECT * FROM vw_DaftarAlat";
+                    SqlDataAdapter da = new SqlDataAdapter(query, conn);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    bs.DataSource = dt;
+                    dgvAlat.DataSource = bs;
+                    bindingNavigator1.BindingSource = bs;
+
+                    lblTotal.Text = "Total Data: " + dt.Rows.Count.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error Tampil: " + ex.Message);
+            }
+        }
+
     }
 }
