@@ -162,5 +162,50 @@ namespace Tanirent
             }
         }
 
+        private void dgvPenyewa_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                try
+                {
+                    DataGridViewRow row = dgvPenyewa.Rows[e.RowIndex];
+
+                    txtNamaPetani.Text = row.Cells["nama_petani"].Value.ToString();
+                    txtNoHp.Text = row.Cells["no_hp"].Value.ToString();
+                    txtAlamat.Text = row.Cells["alamat"].Value.ToString();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error klik: " + ex.Message);
+                }
+            }
+        }
+
+        private void btnTampilData_Click(object sender, EventArgs e)
+        {
+            SqlConnection conn = konn.GetConn();
+            try
+            {
+                conn.Open();
+                string query = "SELECT id_penyewa, nama_petani, no_hp, alamat FROM Penyewa ORDER BY id_penyewa DESC";
+
+                SqlDataAdapter da = new SqlDataAdapter(query, conn);
+                DataTable dt = new DataTable();
+                da.Fill(dt); 
+
+                dgvPenyewa.DataSource = dt;
+
+                if (dgvPenyewa.Columns.Count > 0)
+                {
+                    dgvPenyewa.Columns[0].HeaderText = "ID";
+                    dgvPenyewa.Columns[1].HeaderText = "Nama Petani";
+                    dgvPenyewa.Columns[2].HeaderText = "No. HP";
+                    dgvPenyewa.Columns[3].HeaderText = "Alamat";
+                    dgvPenyewa.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                }
+            }
+            catch (Exception ex) { MessageBox.Show("Gagal Load Data: " + ex.Message); }
+            finally { conn.Close(); }
+        }
     }
 }
