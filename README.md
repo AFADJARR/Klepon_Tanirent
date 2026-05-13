@@ -6,5 +6,12 @@
 <img width="1919" height="1199" alt="Screenshot 2026-04-16 075147" src="https://github.com/user-attachments/assets/33e0a619-c40d-43f1-96c0-18ad5975dbd1" />
 <img width="807" height="527" alt="Screenshot 2026-05-14 014149" src="https://github.com/user-attachments/assets/710af21b-3013-4fc5-80c0-2ae95de71a38" />
 menginput ' OR 1=1-- ke kolom nama petani
+
 <img width="808" height="536" alt="Screenshot 2026-05-14 014202" src="https://github.com/user-attachments/assets/f3b32409-d4bc-4fc5-8e41-9f99a7466d7b" />
 data berhasil berubah menjadi "HACKED"
+
+<img width="1221" height="623" alt="Screenshot 2026-05-14 014209" src="https://github.com/user-attachments/assets/b6fae3be-daa0-4c04-bddc-85a6d435a9aa" />
+setelah data berubah menajadi "HACKED",selanjutnya mengklik button resetdata
+
+<img width="798" height="562" alt="Screenshot 2026-05-14 014214" src="https://github.com/user-attachments/assets/40f6093c-5c1e-4088-b016-c3d7c55e17b1" />
+data kembali ke data semula seperti sebelum melakukan input " 'OR 1=1-- "
