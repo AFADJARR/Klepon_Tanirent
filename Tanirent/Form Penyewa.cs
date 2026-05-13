@@ -136,5 +136,31 @@ namespace Tanirent
             }
         }
 
+        private void btnHapus_Click_1(object sender, EventArgs e)
+        {
+            if (dgvPenyewa.CurrentRow != null)
+            {
+                try
+                {
+                    using (SqlConnection conn = new SqlConnection(konn.GetConn().ConnectionString))
+                    {
+                        using (SqlCommand cmd = new SqlCommand("dbo.sp_DeletePenyewa", conn))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            int id = Convert.ToInt32(dgvPenyewa.CurrentRow.Cells[0].Value);
+                            cmd.Parameters.Add("@PenyewaID", SqlDbType.Int).Value = id;
+
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            MessageBox.Show("Data berhasil dihapus bray");
+                            TampilkanPenyewa();
+                        }
+                    }
+                }
+                catch (Exception ex) { MessageBox.Show("Gagal Hapus: " + ex.Message); }
+            }
+        }
+
     }
 }
