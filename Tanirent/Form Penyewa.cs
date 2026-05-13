@@ -207,5 +207,12 @@ namespace Tanirent
             catch (Exception ex) { MessageBox.Show("Gagal Load Data: " + ex.Message); }
             finally { conn.Close(); }
         }
+
+        private void Form_Penyewa_Load_1(object sender, EventArgs e)
+        {
+            this.penyewaTableAdapter.Fill(this.dBsewataniDataSet.Penyewa);
+
+        }
+
     }
 }
