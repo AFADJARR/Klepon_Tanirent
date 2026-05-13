@@ -16,6 +16,7 @@ namespace Tanirent
         public Form1()
         {
             InitializeComponent();
+            txtPass.UseSystemPasswordChar = true;
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -76,11 +77,11 @@ namespace Tanirent
             {
 
                 conn.Open();
-                MessageBox.Show("Mantap Bang! Koneksi ke Database DBsewatani BERHASIL.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Koneksi ke Database DBsewatani BERHASIL.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Waduh Gagal Connect Bang!\n\nError: " + ex.Message, "Koneksi Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Gagal Connect!\n\nError: " + ex.Message, "Koneksi Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
