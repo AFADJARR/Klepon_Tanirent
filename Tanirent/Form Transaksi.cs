@@ -103,5 +103,46 @@ namespace Tanirent
             catch { }
         }
 
+        private void btnPinjam_Click(object sender, EventArgs e)
+        {
+            if (cmbNama.SelectedIndex == -1 || cbAlat.SelectedIndex == -1)
+            {
+                MessageBox.Show("Pilih Penyewa dan Alat dulu, Bang!");
+                return;
+            }
+
+            string connectionString = konn.GetConn().ConnectionString;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_InsertTransaksi", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@id_alat", cbAlat.SelectedValue);
+                        cmd.Parameters.AddWithValue("@id_penyewa", cmbNama.SelectedValue);
+                        cmd.Parameters.AddWithValue("@tgl_sewa", dtpPinjam.Value);
+                        cmd.Parameters.AddWithValue("@tgl_kembali", dtpKembali.Value);
+                        cmd.Parameters.AddWithValue("@total_bayar", decimal.Parse(txtTotal.Text));
+
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+
+                        MessageBox.Show("Sukses! Data transaksi berhasil ditambahkan .");
+
+                        TampilkanTransaksi(); 
+                        IsiComboAlat();      
+                        BersihkanForm();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal Simpan! Pesan dari Database: " + ex.Message);
+            }
+        }
+
     }
 }
