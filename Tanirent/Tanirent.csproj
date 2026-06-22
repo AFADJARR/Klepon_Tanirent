@@ -46,6 +46,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBsewataniDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBsewataniDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DBsewataniDataSet1.cs">
+      <DependentUpon>DBsewataniDataSet1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DBsewataniDataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBsewataniDataSet1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DBsewataniMainform.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBsewataniMainform.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Form Penyewa.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,6 +112,39 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="DBsewataniDataSet.xsc">
+      <DependentUpon>DBsewataniDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="DBsewataniDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DBsewataniDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DBsewataniDataSet.xss">
+      <DependentUpon>DBsewataniDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="DBsewataniDataSet1.xsc">
+      <DependentUpon>DBsewataniDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="DBsewataniDataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DBsewataniDataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DBsewataniDataSet1.xss">
+      <DependentUpon>DBsewataniDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="DBsewataniMainform.xsc">
+      <DependentUpon>DBsewataniMainform.xsd</DependentUpon>
+    </None>
+    <None Include="DBsewataniMainform.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DBsewataniMainform.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DBsewataniMainform.xss">
+      <DependentUpon>DBsewataniMainform.xsd</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -121,6 +172,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Screenshot 2026-04-15 211520.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chat_files_80559291-e16d-4685-bc2e-44c88672bcf7-2cecd73d-6dd8-4c07-8621-0130ffdd6767-1776261543938-02.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

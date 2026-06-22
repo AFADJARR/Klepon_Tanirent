@@ -85,6 +85,17 @@ namespace Tanirent.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap chat_files_80559291_e16d_4685_bc2e_44c88672bcf7_2cecd73d_6dd8_4c07_8621_0130ffdd6767_1776261543938_02 {
+            get {
+                object obj = ResourceManager.GetObject("chat_files_80559291-e16d-4685-bc2e-44c88672bcf7-2cecd73d-6dd8-4c07-8621-0130ffdd6" +
+                        "767-1776261543938-02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Screenshot_2026_04_15_211418 {
             get {
                 object obj = ResourceManager.GetObject("Screenshot 2026-04-15 211418", resourceCulture);

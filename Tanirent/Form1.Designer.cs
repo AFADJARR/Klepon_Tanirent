@@ -33,25 +33,27 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtUser = new System.Windows.Forms.MaskedTextBox();
             this.txtPass = new System.Windows.Forms.TextBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnConnect = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(298, 404);
+            this.btnLogin.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.btnLogin.Location = new System.Drawing.Point(406, 383);
             this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(128, 23);
+            this.btnLogin.Size = new System.Drawing.Size(128, 26);
             this.btnLogin.TabIndex = 1;
             this.btnLogin.Text = "Login";
-            this.btnLogin.UseVisualStyleBackColor = true;
+            this.btnLogin.UseVisualStyleBackColor = false;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(115, 345);
+            this.label1.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.label1.Location = new System.Drawing.Point(222, 351);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(70, 16);
             this.label1.TabIndex = 3;
@@ -60,7 +62,8 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(383, 351);
+            this.label2.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.label2.Location = new System.Drawing.Point(614, 351);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(67, 16);
             this.label2.TabIndex = 4;
@@ -68,42 +71,46 @@
             // 
             // txtUser
             // 
-            this.txtUser.Location = new System.Drawing.Point(201, 345);
+            this.txtUser.Location = new System.Drawing.Point(204, 383);
             this.txtUser.Name = "txtUser";
             this.txtUser.Size = new System.Drawing.Size(111, 22);
             this.txtUser.TabIndex = 5;
             // 
             // txtPass
             // 
-            this.txtPass.Location = new System.Drawing.Point(473, 345);
+            this.txtPass.Location = new System.Drawing.Point(598, 383);
             this.txtPass.Name = "txtPass";
-            this.txtPass.Size = new System.Drawing.Size(100, 22);
+            this.txtPass.Size = new System.Drawing.Size(107, 22);
             this.txtPass.TabIndex = 6;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::Tanirent.Properties.Resources.Screenshot_2026_04_15_211520;
-            this.pictureBox1.Location = new System.Drawing.Point(118, 12);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(538, 327);
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(497, 403);
+            this.btnConnect.BackColor = System.Drawing.Color.Gold;
+            this.btnConnect.Location = new System.Drawing.Point(430, 415);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(75, 23);
             this.btnConnect.TabIndex = 7;
             this.btnConnect.Text = "Connect";
-            this.btnConnect.UseVisualStyleBackColor = true;
+            this.btnConnect.UseVisualStyleBackColor = false;
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Olive;
+            this.pictureBox1.Image = global::Tanirent.Properties.Resources.chat_files_80559291_e16d_4685_bc2e_44c88672bcf7_2cecd73d_6dd8_4c07_8621_0130ffdd6767_1776261543938_02;
+            this.pictureBox1.Location = new System.Drawing.Point(12, -1);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(888, 349);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 2;
+            this.pictureBox1.TabStop = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.BackColor = System.Drawing.Color.Olive;
+            this.ClientSize = new System.Drawing.Size(912, 450);
             this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.txtPass);
             this.Controls.Add(this.txtUser);
