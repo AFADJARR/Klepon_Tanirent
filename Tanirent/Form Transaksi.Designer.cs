@@ -35,13 +35,11 @@
             this.dBsewataniDataSet1 = new Tanirent.DBsewataniDataSet1();
             this.dtpPinjam = new System.Windows.Forms.DateTimePicker();
             this.dtpKembali = new System.Windows.Forms.DateTimePicker();
-            this.txtTotal = new System.Windows.Forms.TextBox();
             this.btnPinjam = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.cmbNama = new System.Windows.Forms.ComboBox();
             this.transaksiTableAdapter = new Tanirent.DBsewataniDataSet1TableAdapters.TransaksiTableAdapter();
             this.bindingNavigator1 = new System.Windows.Forms.BindingNavigator(this.components);
@@ -58,14 +56,16 @@
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tableAdapterManager = new Tanirent.DBsewataniDataSet1TableAdapters.TableAdapterManager();
             this.dgvTransaksi = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.txtHarga = new System.Windows.Forms.TextBox();
+            this.id_transaksi = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nama_petani = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nama_alat = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tgl_sewa = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tgl_kembali = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.total_bayar = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txtTotal = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnRekapData = new System.Windows.Forms.Button();
+            this.btnAlat = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.transaksiBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dBsewataniDataSet1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
@@ -96,7 +96,7 @@
             // 
             this.dtpPinjam.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.transaksiBindingSource, "tgl_sewa", true));
             this.dtpPinjam.Location = new System.Drawing.Point(207, 177);
-            this.dtpPinjam.MaxDate = new System.DateTime(2026, 5, 21, 0, 0, 0, 0);
+            this.dtpPinjam.MaxDate = new System.DateTime(2026, 10, 24, 0, 0, 0, 0);
             this.dtpPinjam.MinDate = new System.DateTime(2026, 5, 14, 0, 0, 0, 0);
             this.dtpPinjam.Name = "dtpPinjam";
             this.dtpPinjam.Size = new System.Drawing.Size(200, 22);
@@ -107,27 +107,19 @@
             // 
             this.dtpKembali.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.transaksiBindingSource, "tgl_kembali", true));
             this.dtpKembali.Location = new System.Drawing.Point(207, 222);
-            this.dtpKembali.MaxDate = new System.DateTime(2026, 5, 21, 0, 0, 0, 0);
+            this.dtpKembali.MaxDate = new System.DateTime(2026, 10, 24, 0, 0, 0, 0);
             this.dtpKembali.MinDate = new System.DateTime(2026, 5, 14, 0, 0, 0, 0);
             this.dtpKembali.Name = "dtpKembali";
             this.dtpKembali.Size = new System.Drawing.Size(200, 22);
             this.dtpKembali.TabIndex = 3;
             this.dtpKembali.Value = new System.DateTime(2026, 5, 14, 0, 0, 0, 0);
             // 
-            // txtTotal
-            // 
-            this.txtTotal.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.transaksiBindingSource, "total_bayar", true));
-            this.txtTotal.Location = new System.Drawing.Point(207, 305);
-            this.txtTotal.Name = "txtTotal";
-            this.txtTotal.Size = new System.Drawing.Size(100, 22);
-            this.txtTotal.TabIndex = 5;
-            // 
             // btnPinjam
             // 
             this.btnPinjam.BackColor = System.Drawing.Color.Red;
-            this.btnPinjam.Location = new System.Drawing.Point(119, 388);
+            this.btnPinjam.Location = new System.Drawing.Point(66, 384);
             this.btnPinjam.Name = "btnPinjam";
-            this.btnPinjam.Size = new System.Drawing.Size(122, 29);
+            this.btnPinjam.Size = new System.Drawing.Size(130, 34);
             this.btnPinjam.TabIndex = 7;
             this.btnPinjam.Text = "Submit";
             this.btnPinjam.UseVisualStyleBackColor = false;
@@ -173,16 +165,6 @@
             this.label5.TabIndex = 12;
             this.label5.Text = "Tanggal Kembali";
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.BackColor = System.Drawing.Color.PaleGoldenrod;
-            this.label7.Location = new System.Drawing.Point(63, 311);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(79, 16);
-            this.label7.TabIndex = 14;
-            this.label7.Text = "Total Harga";
-            // 
             // cmbNama
             // 
             this.cmbNama.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.transaksiBindingSource, "nama_petani", true));
@@ -224,7 +206,7 @@
             this.bindingNavigator1.MovePreviousItem = this.bindingNavigatorMovePreviousItem;
             this.bindingNavigator1.Name = "bindingNavigator1";
             this.bindingNavigator1.PositionItem = this.bindingNavigatorPositionItem;
-            this.bindingNavigator1.Size = new System.Drawing.Size(1188, 31);
+            this.bindingNavigator1.Size = new System.Drawing.Size(1239, 31);
             this.bindingNavigator1.TabIndex = 19;
             this.bindingNavigator1.Text = "bindingNavigator1";
             // 
@@ -326,76 +308,77 @@
             this.dgvTransaksi.BackgroundColor = System.Drawing.Color.PaleGoldenrod;
             this.dgvTransaksi.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvTransaksi.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1,
-            this.dataGridViewTextBoxColumn2,
-            this.dataGridViewTextBoxColumn3,
-            this.dataGridViewTextBoxColumn4,
-            this.dataGridViewTextBoxColumn5,
-            this.dataGridViewTextBoxColumn6});
+            this.id_transaksi,
+            this.nama_petani,
+            this.nama_alat,
+            this.tgl_sewa,
+            this.tgl_kembali,
+            this.total_bayar});
             this.dgvTransaksi.DataSource = this.transaksiBindingSource;
             this.dgvTransaksi.Location = new System.Drawing.Point(434, 54);
             this.dgvTransaksi.Name = "dgvTransaksi";
             this.dgvTransaksi.RowHeadersWidth = 51;
             this.dgvTransaksi.RowTemplate.Height = 24;
-            this.dgvTransaksi.Size = new System.Drawing.Size(728, 389);
+            this.dgvTransaksi.Size = new System.Drawing.Size(773, 445);
             this.dgvTransaksi.TabIndex = 19;
+            this.dgvTransaksi.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTransaksi_CellClick);
             // 
-            // dataGridViewTextBoxColumn1
+            // id_transaksi
             // 
-            this.dataGridViewTextBoxColumn1.DataPropertyName = "id_transaksi";
-            this.dataGridViewTextBoxColumn1.HeaderText = "id_transaksi";
-            this.dataGridViewTextBoxColumn1.MinimumWidth = 6;
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.Width = 125;
+            this.id_transaksi.DataPropertyName = "id_transaksi";
+            this.id_transaksi.HeaderText = "id_transaksi";
+            this.id_transaksi.MinimumWidth = 6;
+            this.id_transaksi.Name = "id_transaksi";
+            this.id_transaksi.ReadOnly = true;
+            this.id_transaksi.Width = 125;
             // 
-            // dataGridViewTextBoxColumn2
+            // nama_petani
             // 
-            this.dataGridViewTextBoxColumn2.DataPropertyName = "nama_petani";
-            this.dataGridViewTextBoxColumn2.HeaderText = "nama_petani";
-            this.dataGridViewTextBoxColumn2.MinimumWidth = 6;
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.Width = 125;
+            this.nama_petani.DataPropertyName = "nama_petani";
+            this.nama_petani.HeaderText = "nama_petani";
+            this.nama_petani.MinimumWidth = 6;
+            this.nama_petani.Name = "nama_petani";
+            this.nama_petani.Width = 125;
             // 
-            // dataGridViewTextBoxColumn3
+            // nama_alat
             // 
-            this.dataGridViewTextBoxColumn3.DataPropertyName = "nama_alat";
-            this.dataGridViewTextBoxColumn3.HeaderText = "nama_alat";
-            this.dataGridViewTextBoxColumn3.MinimumWidth = 6;
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.Width = 125;
+            this.nama_alat.DataPropertyName = "nama_alat";
+            this.nama_alat.HeaderText = "nama_alat";
+            this.nama_alat.MinimumWidth = 6;
+            this.nama_alat.Name = "nama_alat";
+            this.nama_alat.Width = 125;
             // 
-            // dataGridViewTextBoxColumn4
+            // tgl_sewa
             // 
-            this.dataGridViewTextBoxColumn4.DataPropertyName = "tgl_sewa";
-            this.dataGridViewTextBoxColumn4.HeaderText = "tgl_sewa";
-            this.dataGridViewTextBoxColumn4.MinimumWidth = 6;
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.Width = 125;
+            this.tgl_sewa.DataPropertyName = "tgl_sewa";
+            this.tgl_sewa.HeaderText = "tgl_sewa";
+            this.tgl_sewa.MinimumWidth = 6;
+            this.tgl_sewa.Name = "tgl_sewa";
+            this.tgl_sewa.Width = 125;
             // 
-            // dataGridViewTextBoxColumn5
+            // tgl_kembali
             // 
-            this.dataGridViewTextBoxColumn5.DataPropertyName = "tgl_kembali";
-            this.dataGridViewTextBoxColumn5.HeaderText = "tgl_kembali";
-            this.dataGridViewTextBoxColumn5.MinimumWidth = 6;
-            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            this.dataGridViewTextBoxColumn5.Width = 125;
+            this.tgl_kembali.DataPropertyName = "tgl_kembali";
+            this.tgl_kembali.HeaderText = "tgl_kembali";
+            this.tgl_kembali.MinimumWidth = 6;
+            this.tgl_kembali.Name = "tgl_kembali";
+            this.tgl_kembali.Width = 125;
             // 
-            // dataGridViewTextBoxColumn6
+            // total_bayar
             // 
-            this.dataGridViewTextBoxColumn6.DataPropertyName = "total_bayar";
-            this.dataGridViewTextBoxColumn6.HeaderText = "total_bayar";
-            this.dataGridViewTextBoxColumn6.MinimumWidth = 6;
-            this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
-            this.dataGridViewTextBoxColumn6.Width = 125;
+            this.total_bayar.DataPropertyName = "total_bayar";
+            this.total_bayar.HeaderText = "total_bayar";
+            this.total_bayar.MinimumWidth = 6;
+            this.total_bayar.Name = "total_bayar";
+            this.total_bayar.Width = 125;
             // 
-            // txtHarga
+            // txtTotal
             // 
-            this.txtHarga.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.transaksiBindingSource, "total_bayar", true));
-            this.txtHarga.Location = new System.Drawing.Point(207, 273);
-            this.txtHarga.Name = "txtHarga";
-            this.txtHarga.Size = new System.Drawing.Size(100, 22);
-            this.txtHarga.TabIndex = 20;
+            this.txtTotal.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.transaksiBindingSource, "total_bayar", true));
+            this.txtTotal.Location = new System.Drawing.Point(207, 273);
+            this.txtTotal.Name = "txtTotal";
+            this.txtTotal.Size = new System.Drawing.Size(100, 22);
+            this.txtTotal.TabIndex = 20;
             // 
             // label1
             // 
@@ -403,28 +386,48 @@
             this.label1.BackColor = System.Drawing.Color.PaleGoldenrod;
             this.label1.Location = new System.Drawing.Point(63, 276);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 16);
+            this.label1.Size = new System.Drawing.Size(77, 16);
             this.label1.TabIndex = 21;
-            this.label1.Text = "Total Harga";
+            this.label1.Text = "Total Bayar";
+            // 
+            // btnRekapData
+            // 
+            this.btnRekapData.Location = new System.Drawing.Point(236, 384);
+            this.btnRekapData.Name = "btnRekapData";
+            this.btnRekapData.Size = new System.Drawing.Size(159, 35);
+            this.btnRekapData.TabIndex = 22;
+            this.btnRekapData.Text = "Rekap Data";
+            this.btnRekapData.UseVisualStyleBackColor = true;
+            this.btnRekapData.Click += new System.EventHandler(this.btnRekapData_Click);
+            // 
+            // btnAlat
+            // 
+            this.btnAlat.Location = new System.Drawing.Point(136, 464);
+            this.btnAlat.Name = "btnAlat";
+            this.btnAlat.Size = new System.Drawing.Size(159, 35);
+            this.btnAlat.TabIndex = 23;
+            this.btnAlat.Text = "Data Alat";
+            this.btnAlat.UseVisualStyleBackColor = true;
+            this.btnAlat.Click += new System.EventHandler(this.btnAlat_Click);
             // 
             // Form_Transaksi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Olive;
-            this.ClientSize = new System.Drawing.Size(1188, 495);
+            this.ClientSize = new System.Drawing.Size(1239, 541);
+            this.Controls.Add(this.btnAlat);
+            this.Controls.Add(this.btnRekapData);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtHarga);
+            this.Controls.Add(this.txtTotal);
             this.Controls.Add(this.dgvTransaksi);
             this.Controls.Add(this.bindingNavigator1);
             this.Controls.Add(this.cmbNama);
-            this.Controls.Add(this.label7);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnPinjam);
-            this.Controls.Add(this.txtTotal);
             this.Controls.Add(this.dtpKembali);
             this.Controls.Add(this.dtpPinjam);
             this.Controls.Add(this.cbAlat);
@@ -446,13 +449,11 @@
         private System.Windows.Forms.ComboBox cbAlat;
         private System.Windows.Forms.DateTimePicker dtpPinjam;
         private System.Windows.Forms.DateTimePicker dtpKembali;
-        private System.Windows.Forms.TextBox txtTotal;
         private System.Windows.Forms.Button btnPinjam;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox cmbNama;
         private DBsewataniDataSet1 dBsewataniDataSet1;
         private System.Windows.Forms.BindingSource transaksiBindingSource;
@@ -471,13 +472,15 @@
         private System.Windows.Forms.ToolStripSeparator bindingNavigatorSeparator2;
         private DBsewataniDataSet1TableAdapters.TableAdapterManager tableAdapterManager;
         private System.Windows.Forms.DataGridView dgvTransaksi;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
-        private System.Windows.Forms.TextBox txtHarga;
+        private System.Windows.Forms.TextBox txtTotal;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnRekapData;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id_transaksi;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nama_petani;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nama_alat;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tgl_sewa;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tgl_kembali;
+        private System.Windows.Forms.DataGridViewTextBoxColumn total_bayar;
+        private System.Windows.Forms.Button btnAlat;
     }
 }

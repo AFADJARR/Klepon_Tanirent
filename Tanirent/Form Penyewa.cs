@@ -2,74 +2,45 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient; 
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient; 
+using ExcelDataReader;
 
 namespace Tanirent
 {
     public partial class Form_Penyewa : Form
     {
-        Koneksi konn = new Koneksi();
+        DAL dal = new DAL();
 
         public Form_Penyewa()
         {
             InitializeComponent();
         }
 
-        private void Form_Penyewa_Load(object sender, EventArgs e)
-        {
-            TampilkanPenyewa();
-        }
-
         void TampilkanPenyewa()
         {
-            SqlConnection conn = konn.GetConn();
-            try
+            DataTable dt = dal.TampilPenyewa();
+
+            penyewaBindingSource.DataSource = dt;
+            dgvPenyewa.DataSource = penyewaBindingSource;
+
+            dgvPenyewa.ReadOnly = true;
+            dgvPenyewa.AllowUserToAddRows = false;
+            dgvPenyewa.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            if (dgvPenyewa.Columns.Count > 0)
             {
-                conn.Open();
-                string query = "SELECT * FROM vw_DaftarPenyewa";
+                dgvPenyewa.Columns[0].HeaderText = "ID";
+                dgvPenyewa.Columns[1].HeaderText = "Nama Petani";
+                dgvPenyewa.Columns[2].HeaderText = "No HP";
+                dgvPenyewa.Columns[3].HeaderText = "Alamat";
 
-                SqlCommand cmd = new SqlCommand(query, conn);
-                SqlDataReader dr = cmd.ExecuteReader();
-
-                DataTable dt = new DataTable();
-                dt.Load(dr);
-
-                
-                dgvPenyewa.DataSource = null;
-                dgvPenyewa.DataSource = dt;
-
-                
-                if (dgvPenyewa.Columns.Count > 0)
-                {
-                    if (dgvPenyewa.Columns.Contains("id_penyewa"))
-                        dgvPenyewa.Columns["id_penyewa"].HeaderText = "ID";
-
-                    if (dgvPenyewa.Columns.Contains("nama_petani"))
-                        dgvPenyewa.Columns["nama_petani"].HeaderText = "Nama Petani";
-
-                    if (dgvPenyewa.Columns.Contains("no_hp"))
-                        dgvPenyewa.Columns["no_hp"].HeaderText = "No. HP";
-
-                    if (dgvPenyewa.Columns.Contains("alamat"))
-                        dgvPenyewa.Columns["alamat"].HeaderText = "Alamat";
-
-                    dgvPenyewa.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                }
-
-                dr.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Gagal Tampil: " + ex.Message);
-            }
-            finally
-            {
-                conn.Close();
+                dgvPenyewa.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
         }
 
@@ -81,136 +52,109 @@ namespace Tanirent
                 MessageBox.Show("Nama dan No HP wajib diisi, Bang!", "Peringatan");
                 return;
             }
+            int hasil = dal.InsertPenyewa(txtNamaPetani.Text, txtNoHp.Text, txtAlamat.Text);
 
-            try
+            if (hasil > 0)
             {
-                using (SqlConnection conn = new SqlConnection(konn.GetConn().ConnectionString))
-                {
-                    
-                    using (SqlCommand cmd = new SqlCommand("dbo.sp_InsertPenyewa", conn))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
 
-                        
-                        cmd.Parameters.Add("@NamaPetani", SqlDbType.VarChar).Value = txtNamaPetani.Text;
-                        cmd.Parameters.Add("@NoHp", SqlDbType.VarChar).Value = txtNoHp.Text;
-                        cmd.Parameters.Add("@Alamat", SqlDbType.Text).Value = txtAlamat.Text;
+                MessageBox.Show("Data Penyewa Berhasil Disimpan!");
 
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                        MessageBox.Show("Data Penyewa Berhasil Disimpan via SP!");
-                        TampilkanPenyewa();
-                    }
-                }
+                TampilkanPenyewa();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            else
+            {
+                MessageBox.Show("Data gagal disimpan");
+            }
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            if (dgvPenyewa.CurrentRow != null)
+            if (dgvPenyewa.CurrentRow == null)
             {
-                try
-                {
-                    using (SqlConnection conn = new SqlConnection(konn.GetConn().ConnectionString))
-                    {
-                        using (SqlCommand cmd = new SqlCommand("dbo.sp_UpdatePenyewa", conn))
-                        {
-                            cmd.CommandType = CommandType.StoredProcedure;
-
-                            int id = Convert.ToInt32(dgvPenyewa.CurrentRow.Cells[0].Value);
-
-                            cmd.Parameters.Add("@PenyewaID", SqlDbType.Int).Value = id;
-                            cmd.Parameters.Add("@NamaPetani", SqlDbType.VarChar).Value = txtNamaPetani.Text;
-                            cmd.Parameters.Add("@NoHp", SqlDbType.VarChar).Value = txtNoHp.Text;
-                            cmd.Parameters.Add("@Alamat", SqlDbType.Text).Value = txtAlamat.Text;
-
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                            MessageBox.Show("Data berhasil diperbarui via bray");
-                            TampilkanPenyewa();
-                        }
-                    }
-                }
-                catch (Exception ex) { MessageBox.Show(ex.Message); }
+                MessageBox.Show("Pilih data dulu!");
+                return;
+            }
+            int id = Convert.ToInt32(dgvPenyewa.CurrentRow.Cells[0].Value);
+            int hasil = dal.UpdatePenyewa(id, txtNamaPetani.Text, txtNoHp.Text, txtAlamat.Text);
+            if (hasil > 0)
+            {
+                MessageBox.Show("Data berhasil diperbarui");
+                TampilkanPenyewa();
+            }
+            else
+            {
+                MessageBox.Show("Update gagal");
             }
         }
 
         private void btnHapus_Click_1(object sender, EventArgs e)
         {
-            if (dgvPenyewa.CurrentRow != null)
+            if (dgvPenyewa.CurrentRow == null)
             {
-                try
+                MessageBox.Show("Pilih data dulu!");
+                return;
+            }
+            if (MessageBox.Show(
+                "Yakin ingin menghapus?",
+                "Konfirmasi",
+                MessageBoxButtons.YesNo)
+                == DialogResult.Yes)
+            {
+                int id = Convert.ToInt32(dgvPenyewa.CurrentRow.Cells[0].Value);
+                int hasil = dal.DeletePenyewa(id);
+                if (hasil > 0)
                 {
-                    using (SqlConnection conn = new SqlConnection(konn.GetConn().ConnectionString))
-                    {
-                        using (SqlCommand cmd = new SqlCommand("dbo.sp_DeletePenyewa", conn))
-                        {
-                            cmd.CommandType = CommandType.StoredProcedure;
-
-                            int id = Convert.ToInt32(dgvPenyewa.CurrentRow.Cells[0].Value);
-                            cmd.Parameters.Add("@PenyewaID", SqlDbType.Int).Value = id;
-
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                            MessageBox.Show("Data berhasil dihapus bray");
-                            TampilkanPenyewa();
-                        }
-                    }
+                    MessageBox.Show("Data berhasil dihapus");
+                    TampilkanPenyewa();
                 }
-                catch (Exception ex) { MessageBox.Show("Gagal Hapus: " + ex.Message); }
+                else
+                {
+                    MessageBox.Show("Gagal hapus data");
+                }
             }
         }
 
         private void dgvPenyewa_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (dgvPenyewa.CurrentRow != null && dgvPenyewa.CurrentRow.Index >= 0)
             {
                 try
                 {
-                    DataGridViewRow row = dgvPenyewa.Rows[e.RowIndex];
+                    DataGridViewRow row = dgvPenyewa.CurrentRow;
+                    foreach (DataGridViewCell cell in row.Cells)
+                    {
+                        if (cell.OwningColumn == null) continue;
 
-                    txtNamaPetani.Text = row.Cells["nama_petani"].Value.ToString();
-                    txtNoHp.Text = row.Cells["no_hp"].Value.ToString();
-                    txtAlamat.Text = row.Cells["alamat"].Value.ToString();
+                        string colName = cell.OwningColumn.Name.ToLower();
+                        string colHeader = cell.OwningColumn.HeaderText.ToLower();
+                        string nilaiCell = cell.Value?.ToString() ?? "";
+
+                        if (colName.Contains("nama") || colHeader.Contains("nama"))
+                            txtNamaPetani.Text = nilaiCell;
+                        else if (colName.Contains("hp") || colHeader.Contains("hp") || colName.Contains("telepon"))
+                            txtNoHp.Text = nilaiCell;
+                        else if (colName.Contains("alamat") || colHeader.Contains("alamat"))
+                            txtAlamat.Text = nilaiCell;
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error klik: " + ex.Message);
+                    Console.WriteLine("Error SelectionChanged: " + ex.Message);
                 }
             }
         }
 
         private void btnTampilData_Click(object sender, EventArgs e)
         {
-            SqlConnection conn = konn.GetConn();
-            try
-            {
-                conn.Open();
-                string query = "SELECT id_penyewa, nama_petani, no_hp, alamat FROM Penyewa ORDER BY id_penyewa DESC";
-
-                SqlDataAdapter da = new SqlDataAdapter(query, conn);
-                DataTable dt = new DataTable();
-                da.Fill(dt); 
-
-                dgvPenyewa.DataSource = dt;
-
-                if (dgvPenyewa.Columns.Count > 0)
-                {
-                    dgvPenyewa.Columns[0].HeaderText = "ID";
-                    dgvPenyewa.Columns[1].HeaderText = "Nama Petani";
-                    dgvPenyewa.Columns[2].HeaderText = "No. HP";
-                    dgvPenyewa.Columns[3].HeaderText = "Alamat";
-                    dgvPenyewa.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                }
-            }
-            catch (Exception ex) { MessageBox.Show("Gagal Load Data: " + ex.Message); }
-            finally { conn.Close(); }
+            dgvPenyewa.DataSource = null;
+            TampilkanPenyewa();
         }
 
         private void Form_Penyewa_Load_1(object sender, EventArgs e)
         {
             this.penyewaTableAdapter.Fill(this.dBsewataniDataSet.Penyewa);
+
+            penyewaBindingSource.ResetBindings(false);
 
         }
 
@@ -218,7 +162,7 @@ namespace Tanirent
         {
             try
             {
-                using (SqlConnection conn = konn.GetConn())
+                using (SqlConnection conn = new Koneksi().GetConn())
                 {
                     conn.Open();
                     string query = "UPDATE Penyewa SET nama_petani='HACKED' WHERE id_penyewa='"
@@ -231,9 +175,16 @@ namespace Tanirent
                 }
                 TampilkanPenyewa();
             }
+            catch (SqlException ex)
+            {
+
+                dal.SimpanLog(ex.Message);
+                MessageBox.Show("Serangan Digagalkan SQL: \n" + ex.Message, "Trigger Aktif!");
+            }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                dal.SimpanLog(ex.Message);
+                MessageBox.Show("Error Aplikasi: " + ex.Message);
             }
         }
 
@@ -241,38 +192,106 @@ namespace Tanirent
         {
             try
             {
-                using (SqlConnection conn = konn.GetConn())
-                {
-                    conn.Open();
-                    string query = @"IF OBJECT_ID('dbo.Penyewa_Backup') IS NOT NULL AND OBJECT_ID('dbo.Transaksi_Backup') IS NOT NULL
-                BEGIN
-                    
-                    DELETE FROM dbo.Transaksi
-                    DELETE FROM dbo.Penyewa;
-
-                    SET IDENTITY_INSERT dbo.Penyewa ON;
-                    INSERT INTO dbo.Penyewa (id_penyewa, nama_petani, no_hp, alamat) 
-                    SELECT id_penyewa, nama_petani, no_hp, alamat FROM dbo.Penyewa_Backup;
-                    SET IDENTITY_INSERT dbo.Penyewa OFF;
-
-                    SET IDENTITY_INSERT dbo.Transaksi ON;
-                    INSERT INTO dbo.Transaksi (id_transaksi, id_alat, id_penyewa, tgl_sewa, tgl_kembali, total_bayar) 
-                    SELECT id_transaksi, id_alat, id_penyewa, tgl_sewa, tgl_kembali, total_bayar FROM dbo.Transaksi_Backup;
-                    SET IDENTITY_INSERT dbo.Transaksi OFF;
-                END";
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
-                MessageBox.Show("Data Berhasil Direset! Semua transaksi dan penyewa telah kembali ke kondisi backup.");
-                TampilkanPenyewa(); 
+                dal.ResetPenyewa();
+                MessageBox.Show("Data Penyewa berhasil direset ke kondisi backup!");
+                TampilkanPenyewa();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Reset gagal: " + ex.Message);
+            }
+        }
+
+        private void btnDataAlat_Click(object sender, EventArgs e)
+        {
+            MainForm fMainform = new MainForm();
+            fMainform.Show();
+            this.Hide();
+        }
+
+        private void btnImportExcel_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog { Filter = "Excel Workbook| *. xlsx" })
+            {
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = openFileDialog.FileName;
+                    using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+                    {
+                        using (var reader = ExcelReaderFactory.CreateReader(stream))
+                        {
+                            var result = reader.AsDataSet(new ExcelDataSetConfiguration()
+                            {
+                                ConfigureDataTable = (_) => new ExcelDataTableConfiguration()
+                                {
+                                    UseHeaderRow = true
+                                }
+                            });
+
+                            DataTable dt = result.Tables[0];
+
+                           
+                            penyewaBindingSource.DataSource = dt;
+                            dgvPenyewa.DataSource = penyewaBindingSource;
+
+                            dgvPenyewa.Enabled = true;
+
+                            btnImportDB.Enabled = true;
+
+                            btnImportDB.Enabled = true;
+                            btnSimpan.Enabled = true;
+                            btnEdit.Enabled = true;
+                            btnHapus.Enabled = true;
+                            btnTampilData.Enabled = true;
+                            btnTest.Enabled = true;
+                            btnreset.Enabled = true;
+                            btnDataAlat.Enabled = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void btnImportDB_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DataTable dt = (DataTable)penyewaBindingSource.DataSource;
+
+                if (dt == null || dt.Rows.Count == 0)
+                {
+                    MessageBox.Show("Tidak ada data untuk diimport.");
+                    return;
+                }
+
+                int sukses = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    string NamaPetani = "";
+                    string NoHp = "";
+                    string Alamat = "";
+
+                    foreach (DataColumn col in dt.Columns)
+                    {
+                        string colName = col.ColumnName.ToLower();
+                        if (colName.Contains("nama")) NamaPetani = row[col].ToString();
+                        else if (colName.Contains("hp") || colName.Contains("telepon")) NoHp = row[col].ToString();
+                        else if (colName.Contains("alamat")) Alamat = row[col].ToString();
+                    }
+
+                    if (string.IsNullOrEmpty(NamaPetani))
+                        continue;
+
+                    dal.InsertPenyewa(NamaPetani.Trim(), NoHp.Trim(), Alamat.Trim());
+                    sukses++;
+                }
+                MessageBox.Show("Data Penyewa berhasil ditambahkan");
+                TampilkanPenyewa();
+            }
+            catch (Exception ex)
+            {
+                dal.SimpanLog("Error Import: " + ex.Message);
+                MessageBox.Show("Gagal import data: " + ex.Message);
             }
         }
     }

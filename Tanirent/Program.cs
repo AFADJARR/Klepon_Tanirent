@@ -16,7 +16,14 @@ namespace Tanirent
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            using (Form1 form = new Form1())
+            {
+
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    Application.Run(new Dasboard());
+                }
+            }
         }
     }
 }

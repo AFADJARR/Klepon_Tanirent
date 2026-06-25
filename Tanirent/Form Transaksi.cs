@@ -13,7 +13,9 @@ namespace Tanirent
 {
     public partial class Form_Transaksi : Form
     {
-        Koneksi konn = new Koneksi();
+
+        BindingSource bs = new BindingSource();
+        DAL dal = new DAL();
 
         public Form_Transaksi()
         {
@@ -22,55 +24,28 @@ namespace Tanirent
 
         void IsiComboAlat()
         {
-            SqlConnection conn = konn.GetConn();
-            try
-            {
-                conn.Open();
-                string sql = @"SELECT id_alat, nama_alat 
-                       FROM Alat_Mesin 
-                       WHERE UPPER(status_ketersediaan) = 'TERSEDIA'";
+            DataTable dt = dal.GetAlatTersedia();
 
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                SqlDataReader dr = cmd.ExecuteReader();
 
-                DataTable dt = new DataTable();
-                dt.Load(dr);
-
-                if (dt.Rows.Count > 0)
-                {
-                    cbAlat.DataSource = dt;
-                    cbAlat.DisplayMember = "nama_alat";
-                    cbAlat.ValueMember = "id_alat";
-                    cbAlat.SelectedIndex = -1;
-                }
-                dr.Close();
-            }
-            catch (Exception ex) { MessageBox.Show("Gagal ambil data alat: " + ex.Message); }
-            finally { conn.Close(); }
+            cbAlat.DataSource = dt;
+            cbAlat.DisplayMember = "nama_alat";
+            cbAlat.ValueMember = "id_alat";
+            cbAlat.SelectedIndex = -1;
         }
 
         private void cbAlat_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbAlat.SelectedIndex != -1 && cbAlat.SelectedValue != null)
+            if (cbAlat.SelectedIndex != -1&& cbAlat.SelectedValue != null)
             {
-                if (cbAlat.SelectedValue is DataRowView) return;
 
-                SqlConnection conn = konn.GetConn();
-                try
-                {
-                    conn.Open();
-                    SqlCommand cmd = new SqlCommand("SELECT harga_sewa FROM Alat_Mesin WHERE id_alat = @id", conn);
-                    cmd.Parameters.AddWithValue("@id", cbAlat.SelectedValue);
+                if (cbAlat.SelectedValue is DataRowView)
+                    return;
 
-                    object harga = cmd.ExecuteScalar();
-                    if (harga != null)
-                    {
-                        txtHarga.Text = harga.ToString();
-                        HitungTotal();
-                    }
-                }
-                catch (Exception ex) { MessageBox.Show("Error Harga: " + ex.Message); }
-                finally { conn.Close(); }
+                int id = Convert.ToInt32(cbAlat.SelectedValue);
+                decimal harga = dal.GetHargaAlat(id);
+
+                txtTotal.Text = harga.ToString();
+                HitungTotal();
             }
         }
 
@@ -78,7 +53,7 @@ namespace Tanirent
         {
             try
             {
-                if (!string.IsNullOrEmpty(txtHarga.Text))
+                if (!string.IsNullOrEmpty(txtTotal.Text))
                 {
                     TimeSpan ts = dtpKembali.Value.Date - dtpPinjam.Value.Date;
                     int hari = ts.Days;
@@ -91,7 +66,7 @@ namespace Tanirent
                     }
                     if (hari == 0) hari = 1; 
 
-                    decimal harga = decimal.Parse(txtHarga.Text);
+                    decimal harga = decimal.Parse(txtTotal.Text);
                     decimal total = hari * harga;
 
                     
@@ -107,47 +82,34 @@ namespace Tanirent
         {
             if (cmbNama.SelectedIndex == -1 || cbAlat.SelectedIndex == -1)
             {
-                MessageBox.Show("Pilih Penyewa dan Alat dulu, Bang!");
+                MessageBox.Show("Pilih data penyewa", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            string connectionString = konn.GetConn().ConnectionString;
-
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    using (SqlCommand cmd = new SqlCommand("sp_InsertTransaksi", conn))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
+                dal.InsertTransaksi(Convert.ToInt32(cbAlat.SelectedValue),Convert.ToInt32(cmbNama.SelectedValue),
+                    dtpPinjam.Value,dtpKembali.Value,decimal.Parse(txtTotal.Text));
 
-                        cmd.Parameters.AddWithValue("@id_alat", cbAlat.SelectedValue);
-                        cmd.Parameters.AddWithValue("@id_penyewa", cmbNama.SelectedValue);
-                        cmd.Parameters.AddWithValue("@tgl_sewa", dtpPinjam.Value);
-                        cmd.Parameters.AddWithValue("@tgl_kembali", dtpKembali.Value);
-                        cmd.Parameters.AddWithValue("@total_bayar", decimal.Parse(txtTotal.Text));
+                MessageBox.Show("Transaksi berhasil ditambahkan!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-
-                        MessageBox.Show("Sukses! Data transaksi berhasil ditambahkan .");
-
-                        TampilkanTransaksi(); 
-                        IsiComboAlat();      
-                        BersihkanForm();
-                    }
-                }
+                TampilkanTransaksi();
+                IsiComboAlat();
+                BersihkanForm();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message, "Peringatan Transaksi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Gagal Simpan! Pesan dari Database: " + ex.Message);
+                MessageBox.Show("Gagal sistem: " + ex.Message, "Error C#", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         void BersihkanForm()
         {
             cmbNama.SelectedIndex = -1;
-            txtHarga.Clear();
+            txtTotal.Clear();
             txtTotal.Clear();
             cbAlat.SelectedIndex = -1;
             dtpPinjam.Value = DateTime.Now;
@@ -156,61 +118,78 @@ namespace Tanirent
 
         void IsiComboPenyewa()
         {
-            SqlConnection conn = konn.GetConn();
-            try
-            {
-                conn.Open();
-                string sql = "SELECT id_penyewa, nama_petani FROM Penyewa";
-                SqlDataAdapter da = new SqlDataAdapter(sql, conn);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
+            DataTable dt = dal.GetPenyewa();
 
-                cmbNama.DataSource = dt;
-                cmbNama.DisplayMember = "nama_petani"; 
-                cmbNama.ValueMember = "id_penyewa";    
-                cmbNama.SelectedIndex = -1;
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-            finally { conn.Close(); }
+            cmbNama.DataSource = dt;
+            cmbNama.DisplayMember ="nama_petani";
+            cmbNama.ValueMember ="id_penyewa";
+            cmbNama.SelectedIndex = -1;
         }
 
         void TampilkanTransaksi()
         {
-            string connectionString = konn.GetConn().ConnectionString;
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    
-                    string query = "SELECT * FROM vw_DaftarTransaksi";
+            DataTable dt = dal.TampilTransaksi();
 
-                    SqlDataAdapter da = new SqlDataAdapter(query, conn);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
+            bs.DataSource = dt; 
+            dgvTransaksi.DataSource = bs; 
+            dgvTransaksi.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-                    transaksiBindingSource.DataSource = dt;
-                    dgvTransaksi.DataSource = transaksiBindingSource;
-                    dgvTransaksi.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                }
-            }
-            catch (Exception ex) { MessageBox.Show("Gagal Refresh Grid: " + ex.Message); }
         }
+
+
 
         private void Form_Transaksi_Load_1(object sender, EventArgs e)
         {
             this.transaksiTableAdapter.Fill(this.dBsewataniDataSet1.Transaksi);
-
             IsiComboAlat();
             IsiComboPenyewa();
             TampilkanTransaksi();
 
-            dtpPinjam.Value = DateTime.Now;
-            dtpKembali.Value = DateTime.Now.AddDays(1);
+            bindingNavigator1.BindingSource = bs;
+
+            dtpPinjam.Value =DateTime.Now;
+            dtpKembali.Value =DateTime.Now.AddDays(1);
+            dgvTransaksi.CellClick += new DataGridViewCellEventHandler(dgvTransaksi_CellClick);
         }
 
         private void cmbNama_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnRekapData_Click(object sender, EventArgs e)
+        {
+            FormCetak frmCetak = new FormCetak();
+            frmCetak.Show();
+        }
+
+        private void dgvTransaksi_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (dgvTransaksi.CurrentRow != null && dgvTransaksi.CurrentRow.Index >= 0)
+                {
+                    DataGridViewRow row = dgvTransaksi.CurrentRow;
+
+                    if (row.Cells[0].Value == DBNull.Value || row.Cells[0].Value == null) return;
+                    dtpPinjam.Value = Convert.ToDateTime(row.Cells[3].Value);
+                    dtpKembali.Value = Convert.ToDateTime(row.Cells[4].Value);
+                    cmbNama.Text = row.Cells[1].Value.ToString();
+                    cbAlat.Text = row.Cells[2].Value.ToString();
+                    txtTotal.Text = row.Cells[5].Value.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("tidak ada data di tabel " + ex.Message);
+            }
+        }
+
+        private void btnAlat_Click(object sender, EventArgs e)
+        {
+            MainForm fMainform = new MainForm();
+            fMainform.Show();
+            this.Hide();
         }
     }
 }

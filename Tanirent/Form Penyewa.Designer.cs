@@ -39,10 +39,6 @@
             this.txtNoHp = new System.Windows.Forms.TextBox();
             this.txtAlamat = new System.Windows.Forms.TextBox();
             this.dgvPenyewa = new System.Windows.Forms.DataGridView();
-            this.idpenyewaDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.namapetaniDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nohpDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.alamatDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnHapus = new System.Windows.Forms.Button();
             this.btnSimpan = new System.Windows.Forms.Button();
             this.btnTampilData = new System.Windows.Forms.Button();
@@ -62,6 +58,13 @@
             this.penyewaTableAdapter = new Tanirent.DBsewataniDataSetTableAdapters.PenyewaTableAdapter();
             this.btnreset = new System.Windows.Forms.Button();
             this.btnTest = new System.Windows.Forms.Button();
+            this.btnDataAlat = new System.Windows.Forms.Button();
+            this.btnImportExcel = new System.Windows.Forms.Button();
+            this.btnImportDB = new System.Windows.Forms.Button();
+            this.idpenyewaDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.namapetaniDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nohpDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.alamatDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.penyewaBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dBsewataniDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPenyewa)).BeginInit();
@@ -73,7 +76,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.PaleGoldenrod;
-            this.label1.Location = new System.Drawing.Point(84, 80);
+            this.label1.Location = new System.Drawing.Point(145, 103);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(85, 16);
             this.label1.TabIndex = 0;
@@ -83,7 +86,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.PaleGoldenrod;
-            this.label2.Location = new System.Drawing.Point(84, 123);
+            this.label2.Location = new System.Drawing.Point(184, 143);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(46, 16);
             this.label2.TabIndex = 1;
@@ -93,7 +96,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.PaleGoldenrod;
-            this.label3.Location = new System.Drawing.Point(84, 166);
+            this.label3.Location = new System.Drawing.Point(181, 184);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(49, 16);
             this.label3.TabIndex = 2;
@@ -102,7 +105,7 @@
             // txtNamaPetani
             // 
             this.txtNamaPetani.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.penyewaBindingSource, "nama_petani", true));
-            this.txtNamaPetani.Location = new System.Drawing.Point(240, 77);
+            this.txtNamaPetani.Location = new System.Drawing.Point(272, 97);
             this.txtNamaPetani.Name = "txtNamaPetani";
             this.txtNamaPetani.Size = new System.Drawing.Size(130, 22);
             this.txtNamaPetani.TabIndex = 4;
@@ -120,7 +123,7 @@
             // txtNoHp
             // 
             this.txtNoHp.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.penyewaBindingSource, "no_hp", true));
-            this.txtNoHp.Location = new System.Drawing.Point(240, 117);
+            this.txtNoHp.Location = new System.Drawing.Point(272, 137);
             this.txtNoHp.Name = "txtNoHp";
             this.txtNoHp.Size = new System.Drawing.Size(130, 22);
             this.txtNoHp.TabIndex = 5;
@@ -128,7 +131,7 @@
             // txtAlamat
             // 
             this.txtAlamat.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.penyewaBindingSource, "alamat", true));
-            this.txtAlamat.Location = new System.Drawing.Point(240, 163);
+            this.txtAlamat.Location = new System.Drawing.Point(272, 178);
             this.txtAlamat.Name = "txtAlamat";
             this.txtAlamat.Size = new System.Drawing.Size(130, 22);
             this.txtAlamat.TabIndex = 6;
@@ -145,52 +148,19 @@
             this.alamatDataGridViewTextBoxColumn});
             this.dgvPenyewa.DataSource = this.penyewaBindingSource;
             this.dgvPenyewa.GridColor = System.Drawing.SystemColors.ControlText;
-            this.dgvPenyewa.Location = new System.Drawing.Point(96, 230);
+            this.dgvPenyewa.Location = new System.Drawing.Point(272, 234);
             this.dgvPenyewa.Name = "dgvPenyewa";
             this.dgvPenyewa.RowHeadersWidth = 51;
             this.dgvPenyewa.RowTemplate.Height = 24;
-            this.dgvPenyewa.Size = new System.Drawing.Size(546, 222);
+            this.dgvPenyewa.Size = new System.Drawing.Size(551, 295);
             this.dgvPenyewa.TabIndex = 7;
             this.dgvPenyewa.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPenyewa_CellContentClick);
             this.dgvPenyewa.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPenyewa_CellContentClick);
             // 
-            // idpenyewaDataGridViewTextBoxColumn
-            // 
-            this.idpenyewaDataGridViewTextBoxColumn.DataPropertyName = "id_penyewa";
-            this.idpenyewaDataGridViewTextBoxColumn.HeaderText = "id_penyewa";
-            this.idpenyewaDataGridViewTextBoxColumn.MinimumWidth = 6;
-            this.idpenyewaDataGridViewTextBoxColumn.Name = "idpenyewaDataGridViewTextBoxColumn";
-            this.idpenyewaDataGridViewTextBoxColumn.ReadOnly = true;
-            this.idpenyewaDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // namapetaniDataGridViewTextBoxColumn
-            // 
-            this.namapetaniDataGridViewTextBoxColumn.DataPropertyName = "nama_petani";
-            this.namapetaniDataGridViewTextBoxColumn.HeaderText = "nama_petani";
-            this.namapetaniDataGridViewTextBoxColumn.MinimumWidth = 6;
-            this.namapetaniDataGridViewTextBoxColumn.Name = "namapetaniDataGridViewTextBoxColumn";
-            this.namapetaniDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // nohpDataGridViewTextBoxColumn
-            // 
-            this.nohpDataGridViewTextBoxColumn.DataPropertyName = "no_hp";
-            this.nohpDataGridViewTextBoxColumn.HeaderText = "no_hp";
-            this.nohpDataGridViewTextBoxColumn.MinimumWidth = 6;
-            this.nohpDataGridViewTextBoxColumn.Name = "nohpDataGridViewTextBoxColumn";
-            this.nohpDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // alamatDataGridViewTextBoxColumn
-            // 
-            this.alamatDataGridViewTextBoxColumn.DataPropertyName = "alamat";
-            this.alamatDataGridViewTextBoxColumn.HeaderText = "alamat";
-            this.alamatDataGridViewTextBoxColumn.MinimumWidth = 6;
-            this.alamatDataGridViewTextBoxColumn.Name = "alamatDataGridViewTextBoxColumn";
-            this.alamatDataGridViewTextBoxColumn.Width = 125;
-            // 
             // btnHapus
             // 
             this.btnHapus.BackColor = System.Drawing.Color.Red;
-            this.btnHapus.Location = new System.Drawing.Point(553, 135);
+            this.btnHapus.Location = new System.Drawing.Point(734, 137);
             this.btnHapus.Name = "btnHapus";
             this.btnHapus.Size = new System.Drawing.Size(89, 29);
             this.btnHapus.TabIndex = 8;
@@ -201,7 +171,7 @@
             // btnSimpan
             // 
             this.btnSimpan.BackColor = System.Drawing.Color.PaleGoldenrod;
-            this.btnSimpan.Location = new System.Drawing.Point(553, 60);
+            this.btnSimpan.Location = new System.Drawing.Point(734, 60);
             this.btnSimpan.Name = "btnSimpan";
             this.btnSimpan.Size = new System.Drawing.Size(89, 36);
             this.btnSimpan.TabIndex = 9;
@@ -212,7 +182,7 @@
             // btnTampilData
             // 
             this.btnTampilData.BackColor = System.Drawing.Color.PaleGoldenrod;
-            this.btnTampilData.Location = new System.Drawing.Point(553, 169);
+            this.btnTampilData.Location = new System.Drawing.Point(734, 172);
             this.btnTampilData.Name = "btnTampilData";
             this.btnTampilData.Size = new System.Drawing.Size(89, 35);
             this.btnTampilData.TabIndex = 10;
@@ -223,7 +193,7 @@
             // btnEdit
             // 
             this.btnEdit.BackColor = System.Drawing.Color.PaleGoldenrod;
-            this.btnEdit.Location = new System.Drawing.Point(553, 102);
+            this.btnEdit.Location = new System.Drawing.Point(734, 102);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(89, 29);
             this.btnEdit.TabIndex = 11;
@@ -257,7 +227,7 @@
             this.bindingNavigator1.MovePreviousItem = this.bindingNavigatorMovePreviousItem;
             this.bindingNavigator1.Name = "bindingNavigator1";
             this.bindingNavigator1.PositionItem = this.bindingNavigatorPositionItem;
-            this.bindingNavigator1.Size = new System.Drawing.Size(862, 27);
+            this.bindingNavigator1.Size = new System.Drawing.Size(1046, 31);
             this.bindingNavigator1.TabIndex = 12;
             this.bindingNavigator1.Text = "bindingNavigator1";
             // 
@@ -267,13 +237,13 @@
             this.bindingNavigatorAddNewItem.Image = ((System.Drawing.Image)(resources.GetObject("bindingNavigatorAddNewItem.Image")));
             this.bindingNavigatorAddNewItem.Name = "bindingNavigatorAddNewItem";
             this.bindingNavigatorAddNewItem.RightToLeftAutoMirrorImage = true;
-            this.bindingNavigatorAddNewItem.Size = new System.Drawing.Size(29, 24);
+            this.bindingNavigatorAddNewItem.Size = new System.Drawing.Size(29, 28);
             this.bindingNavigatorAddNewItem.Text = "Add new";
             // 
             // bindingNavigatorCountItem
             // 
             this.bindingNavigatorCountItem.Name = "bindingNavigatorCountItem";
-            this.bindingNavigatorCountItem.Size = new System.Drawing.Size(45, 24);
+            this.bindingNavigatorCountItem.Size = new System.Drawing.Size(45, 28);
             this.bindingNavigatorCountItem.Text = "of {0}";
             this.bindingNavigatorCountItem.ToolTipText = "Total number of items";
             // 
@@ -283,7 +253,7 @@
             this.bindingNavigatorDeleteItem.Image = ((System.Drawing.Image)(resources.GetObject("bindingNavigatorDeleteItem.Image")));
             this.bindingNavigatorDeleteItem.Name = "bindingNavigatorDeleteItem";
             this.bindingNavigatorDeleteItem.RightToLeftAutoMirrorImage = true;
-            this.bindingNavigatorDeleteItem.Size = new System.Drawing.Size(29, 24);
+            this.bindingNavigatorDeleteItem.Size = new System.Drawing.Size(29, 28);
             this.bindingNavigatorDeleteItem.Text = "Delete";
             // 
             // bindingNavigatorMoveFirstItem
@@ -292,7 +262,7 @@
             this.bindingNavigatorMoveFirstItem.Image = ((System.Drawing.Image)(resources.GetObject("bindingNavigatorMoveFirstItem.Image")));
             this.bindingNavigatorMoveFirstItem.Name = "bindingNavigatorMoveFirstItem";
             this.bindingNavigatorMoveFirstItem.RightToLeftAutoMirrorImage = true;
-            this.bindingNavigatorMoveFirstItem.Size = new System.Drawing.Size(29, 24);
+            this.bindingNavigatorMoveFirstItem.Size = new System.Drawing.Size(29, 28);
             this.bindingNavigatorMoveFirstItem.Text = "Move first";
             // 
             // bindingNavigatorMovePreviousItem
@@ -301,13 +271,13 @@
             this.bindingNavigatorMovePreviousItem.Image = ((System.Drawing.Image)(resources.GetObject("bindingNavigatorMovePreviousItem.Image")));
             this.bindingNavigatorMovePreviousItem.Name = "bindingNavigatorMovePreviousItem";
             this.bindingNavigatorMovePreviousItem.RightToLeftAutoMirrorImage = true;
-            this.bindingNavigatorMovePreviousItem.Size = new System.Drawing.Size(29, 24);
+            this.bindingNavigatorMovePreviousItem.Size = new System.Drawing.Size(29, 28);
             this.bindingNavigatorMovePreviousItem.Text = "Move previous";
             // 
             // bindingNavigatorSeparator
             // 
             this.bindingNavigatorSeparator.Name = "bindingNavigatorSeparator";
-            this.bindingNavigatorSeparator.Size = new System.Drawing.Size(6, 27);
+            this.bindingNavigatorSeparator.Size = new System.Drawing.Size(6, 31);
             // 
             // bindingNavigatorPositionItem
             // 
@@ -322,7 +292,7 @@
             // bindingNavigatorSeparator1
             // 
             this.bindingNavigatorSeparator1.Name = "bindingNavigatorSeparator1";
-            this.bindingNavigatorSeparator1.Size = new System.Drawing.Size(6, 27);
+            this.bindingNavigatorSeparator1.Size = new System.Drawing.Size(6, 31);
             // 
             // bindingNavigatorMoveNextItem
             // 
@@ -330,7 +300,7 @@
             this.bindingNavigatorMoveNextItem.Image = ((System.Drawing.Image)(resources.GetObject("bindingNavigatorMoveNextItem.Image")));
             this.bindingNavigatorMoveNextItem.Name = "bindingNavigatorMoveNextItem";
             this.bindingNavigatorMoveNextItem.RightToLeftAutoMirrorImage = true;
-            this.bindingNavigatorMoveNextItem.Size = new System.Drawing.Size(29, 24);
+            this.bindingNavigatorMoveNextItem.Size = new System.Drawing.Size(29, 28);
             this.bindingNavigatorMoveNextItem.Text = "Move next";
             // 
             // bindingNavigatorMoveLastItem
@@ -339,13 +309,13 @@
             this.bindingNavigatorMoveLastItem.Image = ((System.Drawing.Image)(resources.GetObject("bindingNavigatorMoveLastItem.Image")));
             this.bindingNavigatorMoveLastItem.Name = "bindingNavigatorMoveLastItem";
             this.bindingNavigatorMoveLastItem.RightToLeftAutoMirrorImage = true;
-            this.bindingNavigatorMoveLastItem.Size = new System.Drawing.Size(29, 24);
+            this.bindingNavigatorMoveLastItem.Size = new System.Drawing.Size(29, 28);
             this.bindingNavigatorMoveLastItem.Text = "Move last";
             // 
             // bindingNavigatorSeparator2
             // 
             this.bindingNavigatorSeparator2.Name = "bindingNavigatorSeparator2";
-            this.bindingNavigatorSeparator2.Size = new System.Drawing.Size(6, 27);
+            this.bindingNavigatorSeparator2.Size = new System.Drawing.Size(6, 31);
             // 
             // penyewaTableAdapter
             // 
@@ -354,7 +324,7 @@
             // btnreset
             // 
             this.btnreset.BackColor = System.Drawing.Color.Red;
-            this.btnreset.Location = new System.Drawing.Point(434, 163);
+            this.btnreset.Location = new System.Drawing.Point(611, 163);
             this.btnreset.Name = "btnreset";
             this.btnreset.Size = new System.Drawing.Size(97, 23);
             this.btnreset.TabIndex = 14;
@@ -365,7 +335,7 @@
             // btnTest
             // 
             this.btnTest.BackColor = System.Drawing.Color.Red;
-            this.btnTest.Location = new System.Drawing.Point(434, 80);
+            this.btnTest.Location = new System.Drawing.Point(611, 102);
             this.btnTest.Name = "btnTest";
             this.btnTest.Size = new System.Drawing.Size(97, 23);
             this.btnTest.TabIndex = 15;
@@ -373,12 +343,82 @@
             this.btnTest.UseVisualStyleBackColor = false;
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
+            // btnDataAlat
+            // 
+            this.btnDataAlat.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.btnDataAlat.Location = new System.Drawing.Point(906, 67);
+            this.btnDataAlat.Name = "btnDataAlat";
+            this.btnDataAlat.Size = new System.Drawing.Size(89, 36);
+            this.btnDataAlat.TabIndex = 16;
+            this.btnDataAlat.Text = "Data Alat";
+            this.btnDataAlat.UseVisualStyleBackColor = false;
+            this.btnDataAlat.Click += new System.EventHandler(this.btnDataAlat_Click);
+            // 
+            // btnImportExcel
+            // 
+            this.btnImportExcel.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.btnImportExcel.Location = new System.Drawing.Point(867, 123);
+            this.btnImportExcel.Name = "btnImportExcel";
+            this.btnImportExcel.Size = new System.Drawing.Size(128, 51);
+            this.btnImportExcel.TabIndex = 17;
+            this.btnImportExcel.Text = "Export Data Excel";
+            this.btnImportExcel.UseVisualStyleBackColor = false;
+            this.btnImportExcel.Click += new System.EventHandler(this.btnImportExcel_Click);
+            // 
+            // btnImportDB
+            // 
+            this.btnImportDB.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.btnImportDB.Location = new System.Drawing.Point(867, 180);
+            this.btnImportDB.Name = "btnImportDB";
+            this.btnImportDB.Size = new System.Drawing.Size(128, 51);
+            this.btnImportDB.TabIndex = 18;
+            this.btnImportDB.Text = "Import DataBase";
+            this.btnImportDB.UseVisualStyleBackColor = false;
+            this.btnImportDB.Click += new System.EventHandler(this.btnImportDB_Click);
+            // 
+            // idpenyewaDataGridViewTextBoxColumn
+            // 
+            this.idpenyewaDataGridViewTextBoxColumn.DataPropertyName = "id_penyewa";
+            this.idpenyewaDataGridViewTextBoxColumn.HeaderText = "id_penyewa";
+            this.idpenyewaDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.idpenyewaDataGridViewTextBoxColumn.Name = "idpenyewaDataGridViewTextBoxColumn";
+            this.idpenyewaDataGridViewTextBoxColumn.ReadOnly = true;
+            this.idpenyewaDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // namapetaniDataGridViewTextBoxColumn
+            // 
+            this.namapetaniDataGridViewTextBoxColumn.DataPropertyName = "nama_petani";
+            this.namapetaniDataGridViewTextBoxColumn.HeaderText = "nama_petani";
+            this.namapetaniDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.namapetaniDataGridViewTextBoxColumn.Name = "namapetaniDataGridViewTextBoxColumn";
+            this.namapetaniDataGridViewTextBoxColumn.ReadOnly = true;
+            this.namapetaniDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // nohpDataGridViewTextBoxColumn
+            // 
+            this.nohpDataGridViewTextBoxColumn.DataPropertyName = "no_hp";
+            this.nohpDataGridViewTextBoxColumn.HeaderText = "no_hp";
+            this.nohpDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.nohpDataGridViewTextBoxColumn.Name = "nohpDataGridViewTextBoxColumn";
+            this.nohpDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // alamatDataGridViewTextBoxColumn
+            // 
+            this.alamatDataGridViewTextBoxColumn.DataPropertyName = "alamat";
+            this.alamatDataGridViewTextBoxColumn.HeaderText = "alamat";
+            this.alamatDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.alamatDataGridViewTextBoxColumn.Name = "alamatDataGridViewTextBoxColumn";
+            this.alamatDataGridViewTextBoxColumn.Width = 125;
+            // 
             // Form_Penyewa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Olive;
-            this.ClientSize = new System.Drawing.Size(862, 494);
+            this.ClientSize = new System.Drawing.Size(1046, 566);
+            this.Controls.Add(this.btnImportDB);
+            this.Controls.Add(this.btnImportExcel);
+            this.Controls.Add(this.btnDataAlat);
             this.Controls.Add(this.btnTest);
             this.Controls.Add(this.btnreset);
             this.Controls.Add(this.bindingNavigator1);
@@ -435,11 +475,14 @@
         private DBsewataniDataSet dBsewataniDataSet;
         private System.Windows.Forms.BindingSource penyewaBindingSource;
         private DBsewataniDataSetTableAdapters.PenyewaTableAdapter penyewaTableAdapter;
+        private System.Windows.Forms.Button btnreset;
+        private System.Windows.Forms.Button btnTest;
+        private System.Windows.Forms.Button btnDataAlat;
+        private System.Windows.Forms.Button btnImportExcel;
+        private System.Windows.Forms.Button btnImportDB;
         private System.Windows.Forms.DataGridViewTextBoxColumn idpenyewaDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn namapetaniDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn nohpDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn alamatDataGridViewTextBoxColumn;
-        private System.Windows.Forms.Button btnreset;
-        private System.Windows.Forms.Button btnTest;
     }
 }

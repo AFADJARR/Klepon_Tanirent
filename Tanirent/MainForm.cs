@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
 
 namespace Tanirent
 {
     public partial class MainForm : Form
     {
-        Koneksi konn = new Koneksi();
-       
-        BindingSource bs = new BindingSource(); 
-
+        DAL dal = new DAL();
+        BindingSource bs = new BindingSource();
         public MainForm()
         {
             InitializeComponent();
@@ -48,32 +46,25 @@ namespace Tanirent
             TampilkanData();
             BindControls();
 
+            bindingNavigator1.BindingSource = bs;
             bs.ResetBindings(false);
         }
 
         void TampilkanData()
         {
-            string connectionString = konn.GetConn().ConnectionString;
+            DataTable dt = dal.TampilData();
 
-            try
+            bs.DataSource = dt;
+
+            dgvAlat.AutoGenerateColumns = true;
+            dgvAlat.DataSource = null;
+            dgvAlat.DataSource = bs;
+
+            dgvAlat.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            if (dgvAlat.Columns.Contains("id_kat"))
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    string query = "SELECT * FROM vw_DaftarAlat";
-                    SqlDataAdapter da = new SqlDataAdapter(query, conn);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-
-                    bs.DataSource = dt;
-                    dgvAlat.DataSource = bs;
-                    bindingNavigator1.BindingSource = bs;
-
-                    lblTotal.Text = "Total Data: " + dt.Rows.Count.ToString();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error Tampil: " + ex.Message);
+                dgvAlat.Columns["id_kat"].Visible = true;
             }
         }
 
@@ -90,167 +81,125 @@ namespace Tanirent
 
         private void btnSimpan_Click(object sender, EventArgs e)
         {
-            string connectionString = konn.GetConn().ConnectionString;
-
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    using (SqlCommand cmd = new SqlCommand("sp_InsertAlat", conn))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
+                int id_kat = cbKategori.Text == "Traktor" ? 1 : 2;
+                dal.InsertAlat(id_kat, txtNamaAlat.Text, "Standar", "Tinggi", decimal.Parse(txtHarga.Text), cbKondisi.Text);
 
-                        cmd.Parameters.AddWithValue("@id_kat", cbKategori.Text == "Traktor" ? 1 : 2);
-                        cmd.Parameters.AddWithValue("@nama_alat", txtNamaAlat.Text);
-                        cmd.Parameters.AddWithValue("@merk", "Umum");
-                        cmd.Parameters.AddWithValue("@tipe", "Standar");
-                        cmd.Parameters.AddWithValue("@harga_sewa", decimal.Parse(txtHarga.Text));
-                        cmd.Parameters.AddWithValue("@status_kondisi", cbKondisi.Text);
-
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-
-                        MessageBox.Show("Berhasil Tambah Data!");
-                        TampilkanData();
-                        BersihkanForm();
-                    }
-                }
+                MessageBox.Show("Berhasil Tambah Data!");
+                TampilkanData();
+                BersihkanForm();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Gagal Simpan: " + ex.Message);
+                MessageBox.Show("Gagal dari Database: " + ex.Message, "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
             if (dgvAlat.CurrentRow == null) return;
-            string connectionString = konn.GetConn().ConnectionString;
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    using (SqlCommand cmd = new SqlCommand("sp_UpdateAlat", conn))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
+                int id = Convert.ToInt32(dgvAlat.CurrentRow.Cells["id_alat"].Value);
+                int hasil = dal.UpdateAlat(id, txtNamaAlat.Text, decimal.Parse(txtHarga.Text), cbKondisi.Text, cbStatus.Text);
 
-                        cmd.Parameters.AddWithValue("@id_alat", dgvAlat.CurrentRow.Cells["id_alat"].Value);
-                        cmd.Parameters.AddWithValue("@nama_alat", txtNamaAlat.Text);
-                        cmd.Parameters.AddWithValue("@harga_sewa", decimal.Parse(txtHarga.Text));
-                        cmd.Parameters.AddWithValue("@status_kondisi", cbKondisi.Text);
-                        cmd.Parameters.AddWithValue("@status_ketersediaan", cbStatus.Text);
-
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-
-                        MessageBox.Show("Data Berhasil Diupdate!");
-                        TampilkanData();
-                    }
-                }
+                    TampilkanData();
+                    BersihkanForm();
             }
-            catch (Exception ex) { MessageBox.Show("Error Update: " + ex.Message); }
+
+            catch (SqlException ex) 
+            {
+                MessageBox.Show(ex.Message, "Peringatan Update", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error C#: " + ex.Message, "Error Sistem", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         private void btnHapus_Click(object sender, EventArgs e)
         {
             if (dgvAlat.CurrentRow == null) return;
-            string connectionString = konn.GetConn().ConnectionString;
 
             if (MessageBox.Show("Yakin ingin menghapus?", "Konfirmasi", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 try
                 {
-                    using (SqlConnection conn = new SqlConnection(connectionString))
+                    int id = Convert.ToInt32(dgvAlat.CurrentRow.Cells["id_alat"].Value);
+                    int hasil = dal.DeleteAlat(id);
+
+                    if (hasil > 0)
                     {
-                        using (SqlCommand cmd = new SqlCommand("sp_DeleteAlat", conn))
-                        {
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Parameters.AddWithValue("@id_alat", dgvAlat.CurrentRow.Cells["id_alat"].Value);
-
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-
-                            MessageBox.Show("Data berhasil dihapus");
-                            TampilkanData();
-                        }
+                        MessageBox.Show("Data berhasil dihapus");
+                        TampilkanData();
+                        BersihkanForm();
                     }
                 }
-                catch (Exception ex) { MessageBox.Show("Gagal Hapus: " + ex.Message); }
+                catch (SqlException ex)     
+                {
+                    MessageBox.Show(ex.Message, "Peringatan Hapus", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error C#: " + ex.Message, "Error Sistem", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbSearch.Text == "Semua Data")
-            {
-                TampilkanData();
-                return;
-            }
-
-            SqlConnection conn = konn.GetConn();
             try
             {
-                conn.Open();
-                string sql = "SELECT * FROM Alat_Mesin WHERE status_kondisi = @kondisi";
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@kondisi", cbSearch.Text);
+                if (cbSearch.Text == "Semua Data")
+                {
+                    TampilkanData();
+                    return;
+                }
+                DataTable dt = dal.FilterKondisi(cbSearch.Text);
 
-                SqlDataReader dr = cmd.ExecuteReader();
-                DataTable dt = new DataTable();
-                dt.Load(dr); 
-                dgvAlat.DataSource = dt;
+                bs.DataSource = dt;
+                dgvAlat.DataSource = bs;
 
-                dr.Close();
+                if (dgvAlat.Columns.Contains("id_kat"))
+                {
+                    dgvAlat.Columns["id_kat"].Visible = false;
+                }
             }
-            catch (Exception ex) { MessageBox.Show("Gagal Filter: " + ex.Message); }
-            finally { conn.Close(); }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error saat filter: " + ex.Message);
+            }
+
         }
 
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
-        
-            string connectionString = konn.GetConn().ConnectionString;
 
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    
-                    using (SqlCommand cmd = new SqlCommand("sp_SearchAlat", conn))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure; 
-
-                        cmd.Parameters.AddWithValue("@keyword", cbSearch.Text);
-
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) 
-                        {
-                            DataTable dt = new DataTable();
-                            da.Fill(dt); 
-
-                           
-                            bs.DataSource = dt;
-                            dgvAlat.DataSource = bs;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-               
-            }
+            DataTable dt =dal.SearchAlat(cbSearch.Text);
+            bs.DataSource = dt;
+            dgvAlat.DataSource = bs;
         }
 
         private void dgvAlat_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (dgvAlat.CurrentRow != null && dgvAlat.CurrentRow.Index >= 0)
             {
                 DataGridViewRow row = dgvAlat.Rows[e.RowIndex];
-                txtNamaAlat.Text = row.Cells["nama_alat"].Value.ToString();
-                txtHarga.Text = row.Cells["harga_sewa"].Value.ToString();
-                cbKondisi.Text = row.Cells["status_kondisi"].Value.ToString();
-                cbStatus.Text = row.Cells["status_ketersediaan"].Value.ToString();
+
+                if (row.Cells["id_alat"].Value == DBNull.Value || row.Cells["id_alat"].Value == null) return;
+
+                txtNamaAlat.Text = row.Cells["nama_alat"].Value?.ToString() ?? "";
+                txtHarga.Text = row.Cells["harga_sewa"].Value?.ToString() ?? "";
+                cbKondisi.Text = row.Cells["status_kondisi"].Value?.ToString() ?? "";
+                cbStatus.Text = row.Cells["status_ketersediaan"].Value?.ToString() ?? "";
+                    
+
+                string idKat = row.Cells["id_kat"].Value?.ToString() ?? "";
+                cbKategori.Text = (idKat == "1") ? "Traktor" : (idKat == "2" ? "Drone" : "Mesin Panen");
             }
         }
 
@@ -262,25 +211,25 @@ namespace Tanirent
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Yakin ingin Logout?", "Konfirmasi", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("ingin Logout?", "Konfirmasi", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
+                Form1 login = new Form1()
+;               login.Show();
                 this.Hide();
-                Form1 login = new Form1();
-                login.Show();
             }
         }
-
-
         private void btnPenyewa_Click(object sender, EventArgs e)
         {
             Form_Penyewa fPenyewa = new Form_Penyewa();
-            fPenyewa.ShowDialog();
+            fPenyewa.Show();
+            this.Hide();
         }
 
         private void btnTransaksi_Click(object sender, EventArgs e)
         {
             Form_Transaksi fTransaksi = new Form_Transaksi();
-            fTransaksi.ShowDialog();
+            fTransaksi.Show();
+            this.Hide();
         }
 
         void BindControls()
@@ -290,11 +239,37 @@ namespace Tanirent
             cbKondisi.DataBindings.Clear();
             cbStatus.DataBindings.Clear();
 
-            txtNamaAlat.DataBindings.Add("Text", bs, "nama_alat", true);
-            txtHarga.DataBindings.Add("Text", bs, "harga_sewa", true);
 
-            cbKondisi.DataBindings.Add("Text", bs, "status_kondisi", true);
-            cbStatus.DataBindings.Add("Text", bs, "status_ketersediaan", true);
+            DataTable dt = bs.DataSource as DataTable;
+
+            if (dt == null) return;
+
+            if (dt.Columns.Contains("nama_alat"))
+            {
+                txtNamaAlat.DataBindings.Add("Text", bs, "nama_alat", true, DataSourceUpdateMode.Never);
+            }
+
+            if (dt.Columns.Contains("harga_sewa"))
+            {
+                txtHarga.DataBindings.Add("Text", bs, "harga_sewa", true, DataSourceUpdateMode.Never);
+            }
+
+            if (dt.Columns.Contains("status_kondisi"))
+            {
+                cbKondisi.DataBindings.Add("Text", bs, "status_kondisi", true, DataSourceUpdateMode.Never);
+            }
+
+            if (dt.Columns.Contains("status_ketersediaan"))
+            {
+                cbStatus.DataBindings.Add("Text", bs, "status_ketersediaan", true, DataSourceUpdateMode.Never);
+            }
+        }
+
+        private void btnDashboard_Click(object sender, EventArgs e)
+        {
+            Dasboard fDasboard = new Dasboard();
+            fDasboard.Show();
+            this.Hide();
         }
     }
 }

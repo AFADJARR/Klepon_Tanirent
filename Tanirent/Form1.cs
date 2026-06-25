@@ -29,6 +29,7 @@ namespace Tanirent
 
             Koneksi konn = new Koneksi();
             SqlConnection conn = konn.GetConn();
+            
 
             try
             {
@@ -43,9 +44,8 @@ namespace Tanirent
 
                 if (hasil > 0)
                 {
-                    MessageBox.Show("Login Sukses! Selamat Datang Admin.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    MainForm menuUtama = new MainForm();
-                    menuUtama.Show();
+                    MessageBox.Show("Login Sukses! Selamat Datang Admin.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);  
+                    this.DialogResult = DialogResult.OK;
                     this.Hide();
                 }
                 else
@@ -67,39 +67,19 @@ namespace Tanirent
                 }
             }
         }
-
-        private void btnConnect_Click(object sender, EventArgs e)
-        {
-            Koneksi konn = new Koneksi();
-            SqlConnection conn = konn.GetConn();
-
-            try
-            {
-
-                conn.Open();
-                MessageBox.Show("Koneksi ke Database DBsewatani BERHASIL.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Gagal Connect!\n\nError: " + ex.Message, "Koneksi Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                if (conn.State == ConnectionState.Open)
-                {
-                    conn.Close();
-                }
-            }
-        }
     }
+
+
 
     class Koneksi
     {
         public SqlConnection GetConn()
         {
             SqlConnection conn = new SqlConnection();
-            conn.ConnectionString = @"Data Source=JONNISHEREEE\FADJAR;Initial Catalog=DBsewatani;Integrated Security=True";
+            conn.ConnectionString = @"Data Source=192.168.1.82;Initial Catalog=DBsewatani;User ID=sa;Password=Afadjarr67688;";
             return conn;
         }
     }
+
+
 }

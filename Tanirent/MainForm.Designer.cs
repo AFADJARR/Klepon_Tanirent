@@ -44,7 +44,6 @@
             this.btnHapus = new System.Windows.Forms.Button();
             this.dgvAlat = new System.Windows.Forms.DataGridView();
             this.id_alat = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.id_kat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.merk = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tipe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.harga_sewa = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -75,6 +74,7 @@
             this.bindingNavigatorMoveLastItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.alat_MesinTableAdapter = new Tanirent.DBsewataniMainformTableAdapters.Alat_MesinTableAdapter();
+            this.btnDashboard = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.alatMesinBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dBsewataniMainform)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAlat)).BeginInit();
@@ -197,7 +197,6 @@
             this.dgvAlat.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAlat.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id_alat,
-            this.id_kat,
             this.merk,
             this.tipe,
             this.harga_sewa,
@@ -210,7 +209,7 @@
             this.dgvAlat.Name = "dgvAlat";
             this.dgvAlat.RowHeadersWidth = 51;
             this.dgvAlat.RowTemplate.Height = 24;
-            this.dgvAlat.Size = new System.Drawing.Size(1053, 200);
+            this.dgvAlat.Size = new System.Drawing.Size(928, 200);
             this.dgvAlat.TabIndex = 14;
             this.dgvAlat.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAlat_CellClick);
             // 
@@ -222,14 +221,6 @@
             this.id_alat.Name = "id_alat";
             this.id_alat.ReadOnly = true;
             this.id_alat.Width = 125;
-            // 
-            // id_kat
-            // 
-            this.id_kat.DataPropertyName = "id_kat";
-            this.id_kat.HeaderText = "id_kat";
-            this.id_kat.MinimumWidth = 6;
-            this.id_kat.Name = "id_kat";
-            this.id_kat.Width = 125;
             // 
             // merk
             // 
@@ -330,12 +321,13 @@
             // 
             // btnLogout
             // 
-            this.btnLogout.Location = new System.Drawing.Point(834, 503);
+            this.btnLogout.BackColor = System.Drawing.Color.Gold;
+            this.btnLogout.Location = new System.Drawing.Point(885, 533);
             this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(105, 25);
+            this.btnLogout.Size = new System.Drawing.Size(117, 33);
             this.btnLogout.TabIndex = 20;
             this.btnLogout.Text = "Log out";
-            this.btnLogout.UseVisualStyleBackColor = true;
+            this.btnLogout.UseVisualStyleBackColor = false;
             this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
             // label7
@@ -511,12 +503,24 @@
             // 
             this.alat_MesinTableAdapter.ClearBeforeFill = true;
             // 
+            // btnDashboard
+            // 
+            this.btnDashboard.BackColor = System.Drawing.Color.Gold;
+            this.btnDashboard.Location = new System.Drawing.Point(722, 533);
+            this.btnDashboard.Name = "btnDashboard";
+            this.btnDashboard.Size = new System.Drawing.Size(124, 33);
+            this.btnDashboard.TabIndex = 29;
+            this.btnDashboard.Text = "Dashboard";
+            this.btnDashboard.UseVisualStyleBackColor = false;
+            this.btnDashboard.Click += new System.EventHandler(this.btnDashboard_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Olive;
             this.ClientSize = new System.Drawing.Size(1331, 602);
+            this.Controls.Add(this.btnDashboard);
             this.Controls.Add(this.bindingNavigator1);
             this.Controls.Add(this.btnTransaksi);
             this.Controls.Add(this.btnPenyewa);
@@ -593,8 +597,8 @@
         private DBsewataniMainform dBsewataniMainform;
         private System.Windows.Forms.BindingSource alatMesinBindingSource;
         private DBsewataniMainformTableAdapters.Alat_MesinTableAdapter alat_MesinTableAdapter;
+        private System.Windows.Forms.Button btnDashboard;
         private System.Windows.Forms.DataGridViewTextBoxColumn id_alat;
-        private System.Windows.Forms.DataGridViewTextBoxColumn id_kat;
         private System.Windows.Forms.DataGridViewTextBoxColumn merk;
         private System.Windows.Forms.DataGridViewTextBoxColumn tipe;
         private System.Windows.Forms.DataGridViewTextBoxColumn harga_sewa;

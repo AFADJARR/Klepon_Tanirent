@@ -33,7 +33,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtUser = new System.Windows.Forms.MaskedTextBox();
             this.txtPass = new System.Windows.Forms.TextBox();
-            this.btnConnect = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -83,17 +82,6 @@
             this.txtPass.Size = new System.Drawing.Size(107, 22);
             this.txtPass.TabIndex = 6;
             // 
-            // btnConnect
-            // 
-            this.btnConnect.BackColor = System.Drawing.Color.Gold;
-            this.btnConnect.Location = new System.Drawing.Point(430, 415);
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(75, 23);
-            this.btnConnect.TabIndex = 7;
-            this.btnConnect.Text = "Connect";
-            this.btnConnect.UseVisualStyleBackColor = false;
-            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
-            // 
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Olive;
@@ -111,7 +99,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Olive;
             this.ClientSize = new System.Drawing.Size(912, 450);
-            this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.txtPass);
             this.Controls.Add(this.txtUser);
             this.Controls.Add(this.label2);
@@ -134,7 +121,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.MaskedTextBox txtUser;
         private System.Windows.Forms.TextBox txtPass;
-        private System.Windows.Forms.Button btnConnect;
     }
 }
 

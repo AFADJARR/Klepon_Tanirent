@@ -314,12 +314,12 @@ SELECT
     no_hp, 
     alamat
 FROM Penyewa;
-GO
 
--- ============================================================
+
+
 -- 1. STORED PROCEDURE UNTUK TAMBAH PENYEWA
 -- Skenario: Validasi panjang nama (min 3 karakter) dan cek duplikasi
--- ============================================================
+
 ALTER PROCEDURE dbo.sp_InsertPenyewa
     @NamaPetani VARCHAR(100),
     @NoHp VARCHAR(15),
@@ -355,12 +355,12 @@ BEGIN
         THROW;
     END CATCH
 END;
-GO
 
--- ============================================================
+
+
 -- 2. STORED PROCEDURE UNTUK UPDATE PENYEWA
 -- Skenario: Validasi ID ada dan Alamat tidak boleh kosong
--- ============================================================
+
 CREATE PROCEDURE dbo.sp_UpdatePenyewa
     @PenyewaID INT,
     @NamaPetani VARCHAR(100),
@@ -394,12 +394,11 @@ BEGIN
         THROW;
     END CATCH
 END;
-GO
 
--- ============================================================
+
+
 -- 3. STORED PROCEDURE UNTUK HAPUS PENYEWA
--- Skenario: Validasi relasi ke tabel transaksi
--- ============================================================
+
 CREATE PROCEDURE dbo.sp_DeletePenyewa
     @PenyewaID INT
 AS
@@ -420,7 +419,7 @@ BEGIN
         THROW;
     END CATCH
 END;
-GO
+
 
 ALTER VIEW vw_DaftarAlat AS
 SELECT 
@@ -450,3 +449,219 @@ INTO Penyewa_Backup
 FROM Penyewa;
 
 SELECT * INTO Transaksi_Backup FROM Transaksi;
+
+select * from LogAktivitas
+select * from LogError
+
+
+
+-- 1. Tabel untuk mencatat Error dari C# (Try-Catch)
+CREATE TABLE LogError (
+    id_log INT IDENTITY(1,1) PRIMARY KEY,
+    waktu DATETIME,
+    pesan_error VARCHAR(MAX)
+);
+GO
+
+-- 2. Tabel untuk mencatat Aktivitas Normal (Tambah/Hapus Data)
+CREATE TABLE LogAktivitas (
+    id_log INT IDENTITY(1,1) PRIMARY KEY,
+    aktivitas VARCHAR(200),
+    waktu DATETIME
+);
+
+
+-- 3. Tabel untuk mencatat Peringatan Keamanan (Update Massal)
+CREATE TABLE LogKeamanan (
+    id_log INT IDENTITY(1,1) PRIMARY KEY,
+    aktivitas VARCHAR(200),
+    jumlah_data INT,
+    waktu DATETIME
+);
+
+
+-- =========================================================================
+-- TAHAP 2: TRIGGER UNTUK TABEL ALAT_MESIN
+-- =========================================================================
+
+-- Trigger Insert Alat
+CREATE TRIGGER trg_InsertAlat
+ON Alat_Mesin
+AFTER INSERT
+AS
+BEGIN
+    INSERT INTO LogAktivitas (aktivitas, waktu)
+    VALUES ('Tambah data Alat/Mesin baru', GETDATE());
+END;
+
+
+-- Trigger Delete Alat
+CREATE TRIGGER trg_DeleteAlat
+ON Alat_Mesin
+AFTER DELETE
+AS
+BEGIN
+    INSERT INTO LogAktivitas (aktivitas, waktu)
+    VALUES ('Hapus data Alat/Mesin', GETDATE());
+END;
+
+
+-- Trigger Keamanan: Cegah Update Massal Alat (Sesuai Praktikum 6)
+CREATE TRIGGER trg_PreventMassUpdateAlat
+ON Alat_Mesin
+AFTER UPDATE
+AS
+BEGIN
+    DECLARE @jumlah INT;
+    -- Menghitung berapa baris data yang sedang di-update
+    SELECT @jumlah = COUNT(*) FROM inserted;
+
+    -- Jika update lebih dari 5 data sekaligus, batalkan!
+    IF @jumlah > 1
+    BEGIN
+        -- Catat ke log keamanan
+        INSERT INTO LogKeamanan (aktivitas, jumlah_data, waktu)
+        VALUES ('WARNING: Update massal terdeteksi pada tabel Alat_Mesin', @jumlah, GETDATE());
+        
+        -- Batalkan transaksi
+        ROLLBACK TRANSACTION;
+        
+        -- Lempar pesan error
+        RAISERROR('Update dibatalkan! Terlalu banyak data alat yang diubah sekaligus.', 16, 1);
+    END
+END;
+GO
+
+-- =========================================================================
+-- TAHAP 3: TRIGGER UNTUK TABEL PENYEWA
+-- =========================================================================
+
+-- Trigger Insert Penyewa
+CREATE TRIGGER trg_InsertPenyewa
+ON Penyewa
+AFTER INSERT
+AS
+BEGIN
+    INSERT INTO LogAktivitas (aktivitas, waktu)
+    VALUES ('Tambah data Penyewa (Petani) baru', GETDATE());
+END;
+
+
+-- Trigger Delete Penyewa
+CREATE TRIGGER trg_DeletePenyewa
+ON Penyewa
+AFTER DELETE
+AS
+BEGIN
+    INSERT INTO LogAktivitas (aktivitas, waktu)
+    VALUES ('Hapus data Penyewa (Petani)', GETDATE());
+END;
+
+alter TRIGGER trg_UpdatePenyewa
+ON Penyewa
+AFTER update
+AS
+BEGIN
+    INSERT INTO LogAktivitas (aktivitas, waktu)
+    VALUES ('Update data Penyewa (Petani)', GETDATE());
+END;
+
+
+create TRIGGER trg_UpdateAlat
+ON Alat_Mesin
+AFTER update
+AS
+BEGIN
+    INSERT INTO LogAktivitas (aktivitas, waktu)
+    VALUES ('Update data alat', GETDATE());
+END;
+
+-- Trigger Keamanan: Cegah Update Massal Penyewa
+CREATE TRIGGER trg_PreventMassUpdatePenyewa
+ON Penyewa
+AFTER UPDATE
+AS
+BEGIN
+    DECLARE @jumlah INT;
+    SELECT @jumlah = COUNT(*) FROM inserted;
+
+    IF @jumlah > 1
+    BEGIN
+        INSERT INTO LogKeamanan (aktivitas, jumlah_data, waktu)
+        VALUES ('WARNING: Update massal terdeteksi pada tabel Penyewa', @jumlah, GETDATE());
+        
+        ROLLBACK TRANSACTION;
+        RAISERROR('Update dibatalkan! Terlalu banyak data penyewa yang diubah.', 16, 1);
+    END
+END;
+
+
+-- =========================================================================
+-- TAHAP 4: TRIGGER UNTUK TABEL TRANSAKSI
+-- =========================================================================
+
+-- Trigger Insert Transaksi
+CREATE TRIGGER trg_InsertTransaksiLog
+ON Transaksi
+AFTER INSERT
+AS
+BEGIN
+    INSERT INTO LogAktivitas (aktivitas, waktu)
+    VALUES ('Terjadi Transaksi Sewa Baru', GETDATE());
+END;
+
+
+-- Trigger Delete Transaksi
+CREATE TRIGGER trg_DeleteTransaksiLog
+ON Transaksi
+AFTER DELETE
+AS
+BEGIN
+    INSERT INTO LogAktivitas (aktivitas, waktu)
+    VALUES ('Data Transaksi Dihapus', GETDATE());
+END;
+
+select * from LogError
+	select * from LogAktivitas
+	select * from LogKeamanan
+
+select * from dbo.Penyewa
+
+SELECT * FROM LogError ORDER BY id_log DESC;
+
+
+ALTER PROCEDURE sp_DashBoard
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT 
+        MONTH(tgl_sewa) AS Bulan, 
+        SUM(total_bayar) AS TotalPendapatan
+    FROM Transaksi
+    GROUP BY MONTH(tgl_sewa)
+    ORDER BY Bulan;
+END;
+
+
+
+ALTER PROCEDURE sp_DashBoardByTahun
+    @inTahun INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT 
+        MONTH(tgl_sewa) AS Bulan, 
+        SUM(total_bayar) AS TotalPendapatan
+    FROM Transaksi
+    WHERE YEAR(tgl_sewa) = @inTahun
+    GROUP BY MONTH(tgl_sewa)
+    ORDER BY Bulan;
+END;
+
+
+SELECT 
+    MONTH(tgl_sewa) AS Bulan, 
+    SUM(total_bayar) AS TotalPendapatan
+FROM Transaksi
+GROUP BY MONTH(tgl_sewa)
+ORDER BY Bulan;
